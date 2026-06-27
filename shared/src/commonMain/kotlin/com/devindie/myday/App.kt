@@ -1,0 +1,55 @@
+package com.devindie.myday
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.devindie.myday.core.navigation.MainShellRoute
+import com.devindie.myday.feature.apppromotion.api.AppPromotionPlatformBinding
+import com.devindie.myday.core.ui.theme.AppTheme
+import com.devindie.myday.feature.main.api.MainScreen
+import com.devindie.myday.feature.onboarding.api.OnboardingRoute
+import com.devindie.myday.feature.onboarding.api.OnboardingScreen
+import com.devindie.myday.feature.splash.api.SplashRoute
+import com.devindie.myday.feature.splash.api.SplashScreen
+
+@Composable
+fun App(modifier: Modifier = Modifier) {
+    AppTheme {
+        AppPromotionPlatformBinding()
+        val navController = rememberNavController()
+        NavHost(
+            navController = navController,
+            startDestination = SplashRoute,
+            modifier = modifier,
+        ) {
+            composable<SplashRoute> {
+                SplashScreen(
+                    onNavigateToMain = {
+                        navController.navigate(MainShellRoute) {
+                            popUpTo<SplashRoute> { inclusive = true }
+                        }
+                    },
+                    onNavigateToOnboarding = {
+                        navController.navigate(OnboardingRoute) {
+                            popUpTo<SplashRoute> { inclusive = true }
+                        }
+                    },
+                )
+            }
+            composable<OnboardingRoute> {
+                OnboardingScreen(
+                    onNavigateToMain = {
+                        navController.navigate(MainShellRoute) {
+                            popUpTo<OnboardingRoute> { inclusive = true }
+                        }
+                    },
+                )
+            }
+            composable<MainShellRoute> {
+                MainScreen()
+            }
+        }
+    }
+}
