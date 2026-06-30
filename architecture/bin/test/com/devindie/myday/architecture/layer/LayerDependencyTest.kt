@@ -86,6 +86,28 @@ class LayerDependencyTest {
     }
 
     @Test
+    fun `domain layer does not import storage`() {
+        Konsist.scopeFromPackage("com.devindie.myday.domain..")
+            .files
+            .assertFalse { file ->
+                file.imports.any { import ->
+                    import.name.startsWith("com.devindie.myday.storage.")
+                }
+            }
+    }
+
+    @Test
+    fun `data layer does not import storage`() {
+        Konsist.scopeFromPackage("com.devindie.myday.data..")
+            .files
+            .assertFalse { file ->
+                file.imports.any { import ->
+                    import.name.startsWith("com.devindie.myday.storage.")
+                }
+            }
+    }
+
+    @Test
     fun `data layer does not import presentation packages`() {
         val presentationImportPrefixes =
             listOf(

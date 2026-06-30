@@ -51,6 +51,7 @@ kotlin {
             implementation(projects.domain)
             implementation(projects.analytics)
             implementation(projects.billing)
+            implementation(projects.storage)
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.compose.runtime)
             implementation(libs.compose.animation)
@@ -72,6 +73,7 @@ kotlin {
             implementation(libs.androidx.paging.common)
             implementation(libs.androidx.paging.compose)
             implementation("co.touchlab:kermit:2.1.0")
+            implementation(projects.storage)
         }
         iosMain.dependencies {
             // iOS Koin bootstrap links :data at the app layer (see README).

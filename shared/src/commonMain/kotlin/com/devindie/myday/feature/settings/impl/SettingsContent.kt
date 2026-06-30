@@ -83,6 +83,9 @@ internal fun SettingsContent(
             item(key = "billing-smoke") {
                 com.devindie.myday.billing.BillingSmokePanel()
             }
+            item(key = "storage-smoke") {
+                com.devindie.myday.storage.StorageSmokePanel()
+            }
         }
     }
 }

@@ -9,6 +9,9 @@ import com.devindie.myday.browsePagingModule
 import com.devindie.myday.core.di.startKoinApp
 import com.devindie.myday.data.di.platformDataModule
 import com.devindie.myday.settings.settingsCatalogModule
+import com.devindie.myday.storage.AndroidStoragePickerHost
+import com.devindie.myday.storage.api.StorageConfig
+import com.devindie.myday.storage.api.storageFeatureModule
 import org.koin.android.ext.koin.androidContext
 
 class MyDayApplication : Application() {
@@ -35,6 +38,12 @@ class MyDayApplication : Application() {
                     billingKoinModuleForAndroid(
                         enabled = BuildConfig.BILLING_ENABLED,
                         apiKey = BuildConfig.REVENUECAT_API_KEY_ANDROID,
+                    ),
+                    storageFeatureModule(
+                        StorageConfig(
+                            enabled = true,
+                            pickerHost = AndroidStoragePickerHost(contentResolver),
+                        ),
                     ),
                 ),
         ) {

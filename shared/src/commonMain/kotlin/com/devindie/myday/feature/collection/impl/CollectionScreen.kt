@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.devindie.myday.domain.model.browse.CollectibleCard
+import com.devindie.myday.storage.StorageSmokePanel
 import org.koin.compose.viewmodel.koinViewModel
 
 /** Lazy list items before the total-count header: search field and category chips. */
@@ -74,6 +75,9 @@ private fun CollectionScreenContent(state: CollectionScreenUiState, modifier: Mo
                 }
                 item(key = "categories") {
                     Text(text = "Categories")
+                }
+                item(key = "storage") {
+                    StorageSmokePanel()
                 }
             }
         }

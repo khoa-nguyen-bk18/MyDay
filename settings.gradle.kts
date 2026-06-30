@@ -30,6 +30,7 @@ dependencyResolutionManagement {
 
 include(":analytics")
 include(":billing")
+include(":storage")
 include(":androidApp")
 include(":benchmark")
 include(":architecture")

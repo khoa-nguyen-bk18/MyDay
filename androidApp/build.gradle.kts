@@ -22,6 +22,7 @@ dependencies {
     // Platform DI: androidApp supplies platformDataModule() (see README).
     implementation(projects.data)
     implementation(projects.analytics)
+    implementation(projects.storage)
 
     baselineProfile(projects.benchmark)
 
