@@ -16,43 +16,39 @@ import kotlin.test.assertTrue
 
 class BillingClientImplTest {
     @Test
-    fun isEntitled_reflectsCachedCustomerInfo() =
-        runTest {
-            val provider =
-                FakeBillingProvider(
-                    customerInfo = BillingCustomerInfo(setOf("premium"), emptyMap()),
-                )
-            val client = BillingClientImpl(provider)
-            client.initialize()
-            assertTrue(client.isEntitled("premium"))
-            assertFalse(client.isEntitled("pro"))
-        }
+    fun isEntitled_reflectsCachedCustomerInfo() = runTest {
+        val provider =
+            FakeBillingProvider(
+                customerInfo = BillingCustomerInfo(setOf("premium"), emptyMap()),
+            )
+        val client = BillingClientImpl(provider)
+        client.initialize()
+        assertTrue(client.isEntitled("premium"))
+        assertFalse(client.isEntitled("pro"))
+    }
 
     @Test
-    fun purchase_delegatesToProvider() =
-        runTest {
-            val provider = FakeBillingProvider()
-            val client = BillingClientImpl(provider)
-            client.purchase("monthly")
-            assertEquals("monthly", provider.lastPurchasePackageId)
-        }
+    fun purchase_delegatesToProvider() = runTest {
+        val provider = FakeBillingProvider()
+        val client = BillingClientImpl(provider)
+        client.purchase("monthly")
+        assertEquals("monthly", provider.lastPurchasePackageId)
+    }
 
     @Test
-    fun providerThrows_returnsUnknownFailure() =
-        runTest {
-            val provider =
-                object : BillingProvider by FakeBillingProvider() {
-                    override suspend fun restorePurchases(): BillingResult<BillingCustomerInfo> = error("network down")
-                }
-            val client = BillingClientImpl(provider)
-            val result = client.restorePurchases() as BillingResult.Failure
-            assertTrue(result.error is BillingError.Unknown)
-        }
+    fun providerThrows_returnsUnknownFailure() = runTest {
+        val provider =
+            object : BillingProvider by FakeBillingProvider() {
+                override suspend fun restorePurchases(): BillingResult<BillingCustomerInfo> = error("network down")
+            }
+        val client = BillingClientImpl(provider)
+        val result = client.restorePurchases() as BillingResult.Failure
+        assertTrue(result.error is BillingError.Unknown)
+    }
 }
 
-private class FakeBillingProvider(
-    private val customerInfo: BillingCustomerInfo = BillingCustomerInfo.Empty,
-) : BillingProvider {
+private class FakeBillingProvider(private val customerInfo: BillingCustomerInfo = BillingCustomerInfo.Empty) :
+    BillingProvider {
     var lastPurchasePackageId: String? = null
     private val state = MutableStateFlow(customerInfo)
 
@@ -79,7 +75,8 @@ private class FakeBillingProvider(
 
     override fun observeCustomerInfo(): Flow<BillingCustomerInfo> = state
 
-    override suspend fun logIn(appUserId: String): BillingResult<BillingCustomerInfo> = BillingResult.Success(customerInfo)
+    override suspend fun logIn(appUserId: String): BillingResult<BillingCustomerInfo> =
+        BillingResult.Success(customerInfo)
 
     override suspend fun logOut(): BillingResult<BillingCustomerInfo> = BillingResult.Success(BillingCustomerInfo.Empty)
 }

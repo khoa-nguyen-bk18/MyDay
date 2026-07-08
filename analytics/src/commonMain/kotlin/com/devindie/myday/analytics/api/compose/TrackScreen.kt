@@ -6,11 +6,7 @@ import com.devindie.myday.analytics.api.AnalyticsClient
 import org.koin.compose.koinInject
 
 @Composable
-fun TrackScreen(
-    screenName: String,
-    screenClass: String? = null,
-    client: AnalyticsClient = koinInject(),
-) {
+fun TrackScreen(screenName: String, screenClass: String? = null, client: AnalyticsClient = koinInject()) {
     LaunchedEffect(screenName, screenClass) {
         client.logScreen(screenName, screenClass)
     }

@@ -7,11 +7,10 @@ import com.devindie.myday.domain.model.settings.SettingsSection
 interface SettingsCatalog {
     val sections: List<SettingsSection>
 
-    fun definition(key: SettingKey): SettingDefinition? =
-        sections
-            .asSequence()
-            .flatMap { it.definitions }
-            .firstOrNull { it.key == key }
+    fun definition(key: SettingKey): SettingDefinition? = sections
+        .asSequence()
+        .flatMap { it.definitions }
+        .firstOrNull { it.key == key }
 
     fun allDefinitions(): List<SettingDefinition> = sections.flatMap { it.definitions }
 }

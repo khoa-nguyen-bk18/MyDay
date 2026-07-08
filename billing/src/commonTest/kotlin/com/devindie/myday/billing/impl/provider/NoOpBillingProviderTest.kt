@@ -13,29 +13,25 @@ class NoOpBillingProviderTest {
     private val provider = NoOpBillingProvider()
 
     @Test
-    fun initialize_returnsSuccess() =
-        runTest {
-            assertTrue(provider.initialize() is BillingResult.Success)
-        }
+    fun initialize_returnsSuccess() = runTest {
+        assertTrue(provider.initialize() is BillingResult.Success)
+    }
 
     @Test
-    fun getOfferings_returnsEmpty() =
-        runTest {
-            val result = provider.getOfferings() as BillingResult.Success
-            assertEquals(null, result.value.current)
-            assertTrue(result.value.all.isEmpty())
-        }
+    fun getOfferings_returnsEmpty() = runTest {
+        val result = provider.getOfferings() as BillingResult.Success
+        assertEquals(null, result.value.current)
+        assertTrue(result.value.all.isEmpty())
+    }
 
     @Test
-    fun purchase_returnsNotConfigured() =
-        runTest {
-            val result = provider.purchase("monthly") as BillingResult.Failure
-            assertEquals(BillingError.NotConfigured, result.error)
-        }
+    fun purchase_returnsNotConfigured() = runTest {
+        val result = provider.purchase("monthly") as BillingResult.Failure
+        assertEquals(BillingError.NotConfigured, result.error)
+    }
 
     @Test
-    fun observeCustomerInfo_emitsEmpty() =
-        runTest {
-            assertEquals(BillingCustomerInfo.Empty, provider.observeCustomerInfo().first())
-        }
+    fun observeCustomerInfo_emitsEmpty() = runTest {
+        assertEquals(BillingCustomerInfo.Empty, provider.observeCustomerInfo().first())
+    }
 }

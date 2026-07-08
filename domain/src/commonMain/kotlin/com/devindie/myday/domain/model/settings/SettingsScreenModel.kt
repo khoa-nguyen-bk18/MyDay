@@ -2,11 +2,7 @@ package com.devindie.myday.domain.model.settings
 
 data class SettingsScreenModel(val sections: List<SettingsSectionModel>)
 
-data class SettingsSectionModel(
-    val id: String,
-    val title: String,
-    val items: List<SettingsItemModel>,
-)
+data class SettingsSectionModel(val id: String, val title: String, val items: List<SettingsItemModel>)
 
 sealed interface SettingsItemModel {
     val key: SettingKey

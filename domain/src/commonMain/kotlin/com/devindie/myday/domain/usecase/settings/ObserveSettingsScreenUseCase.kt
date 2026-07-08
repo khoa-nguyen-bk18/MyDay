@@ -10,10 +10,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
-class ObserveSettingsScreenUseCase(
-    private val repository: SettingsRepository,
-    private val catalog: SettingsCatalog,
-) {
+class ObserveSettingsScreenUseCase(private val repository: SettingsRepository, private val catalog: SettingsCatalog) {
     operator fun invoke(): Flow<SettingsScreenModel> {
         val definitions = catalog.allDefinitions()
         if (definitions.isEmpty()) {
@@ -30,16 +27,16 @@ class ObserveSettingsScreenUseCase(
             val values = entries.toMap()
             SettingsScreenModel(
                 sections =
-                    catalog.sections.map { section ->
-                        SettingsSectionModel(
-                            id = section.id,
-                            title = section.title,
-                            items =
-                                section.definitions.map { definition ->
-                                    definition.toItemModel(values.getValue(definition.key))
-                                },
-                        )
-                    },
+                catalog.sections.map { section ->
+                    SettingsSectionModel(
+                        id = section.id,
+                        title = section.title,
+                        items =
+                        section.definitions.map { definition ->
+                            definition.toItemModel(values.getValue(definition.key))
+                        },
+                    )
+                },
             )
         }
     }

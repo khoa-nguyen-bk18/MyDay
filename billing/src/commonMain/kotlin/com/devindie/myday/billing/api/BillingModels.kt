@@ -2,15 +2,9 @@ package com.devindie.myday.billing.api
 
 import kotlin.time.Instant
 
-data class BillingOfferings(
-    val current: BillingOffering?,
-    val all: Map<String, BillingOffering>,
-)
+data class BillingOfferings(val current: BillingOffering?, val all: Map<String, BillingOffering>)
 
-data class BillingOffering(
-    val identifier: String,
-    val packages: List<BillingPackage>,
-)
+data class BillingOffering(val identifier: String, val packages: List<BillingPackage>)
 
 data class BillingPackage(
     val identifier: String,
@@ -33,11 +27,7 @@ enum class BillingPackageType {
     WEEKLY,
 }
 
-data class BillingPurchase(
-    val productId: String,
-    val transactionId: String?,
-    val customerInfo: BillingCustomerInfo,
-)
+data class BillingPurchase(val productId: String, val transactionId: String?, val customerInfo: BillingCustomerInfo)
 
 data class BillingCustomerInfo(
     val activeEntitlements: Set<String>,
@@ -49,13 +39,9 @@ data class BillingCustomerInfo(
 }
 
 sealed interface BillingResult<out T> {
-    data class Success<T>(
-        val value: T,
-    ) : BillingResult<T>
+    data class Success<T>(val value: T) : BillingResult<T>
 
-    data class Failure(
-        val error: BillingError,
-    ) : BillingResult<Nothing>
+    data class Failure(val error: BillingError) : BillingResult<Nothing>
 }
 
 sealed interface BillingError {
@@ -63,12 +49,7 @@ sealed interface BillingError {
 
     data object NotConfigured : BillingError
 
-    data class StoreError(
-        val message: String,
-        val code: Int? = null,
-    ) : BillingError
+    data class StoreError(val message: String, val code: Int? = null) : BillingError
 
-    data class Unknown(
-        val message: String,
-    ) : BillingError
+    data class Unknown(val message: String) : BillingError
 }

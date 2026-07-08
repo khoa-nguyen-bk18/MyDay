@@ -1,20 +1,11 @@
 package com.devindie.myday.analytics.api.provider
 
 interface EventAnalyticsProvider {
-    fun logEvent(
-        name: String,
-        params: Map<String, Any>,
-    )
+    fun logEvent(name: String, params: Map<String, Any>)
 
-    fun logScreen(
-        screenName: String,
-        screenClass: String?,
-    )
+    fun logScreen(screenName: String, screenClass: String?)
 
-    fun setUserProperty(
-        name: String,
-        value: String,
-    )
+    fun setUserProperty(name: String, value: String)
 
     fun setUserId(userId: String?)
 }

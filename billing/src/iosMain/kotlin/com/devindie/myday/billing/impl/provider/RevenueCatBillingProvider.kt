@@ -10,10 +10,10 @@ import com.devindie.myday.billing.impl.mapper.toBillingOfferings
 import com.devindie.myday.billing.impl.mapper.toBillingPurchase
 import com.devindie.myday.billing.impl.mapper.toBillingStoreError
 import com.revenuecat.purchases.kmp.Purchases
+import com.revenuecat.purchases.kmp.PurchasesDelegate
 import com.revenuecat.purchases.kmp.models.CacheFetchPolicy
 import com.revenuecat.purchases.kmp.models.CustomerInfo
 import com.revenuecat.purchases.kmp.models.Package
-import com.revenuecat.purchases.kmp.PurchasesDelegate
 import com.revenuecat.purchases.kmp.models.PurchasesError
 import com.revenuecat.purchases.kmp.models.StoreProduct
 import com.revenuecat.purchases.kmp.models.StoreTransaction
@@ -27,11 +27,10 @@ internal class RevenueCatBillingProvider : BillingProvider {
     private val purchases: Purchases
         get() = Purchases.sharedInstance
 
-    override suspend fun initialize(): BillingResult<Unit> =
-        when (val result = fetchCustomerInfo()) {
-            is BillingResult.Success -> BillingResult.Success(Unit)
-            is BillingResult.Failure -> result
-        }
+    override suspend fun initialize(): BillingResult<Unit> = when (val result = fetchCustomerInfo()) {
+        is BillingResult.Success -> BillingResult.Success(Unit)
+        is BillingResult.Failure -> result
+    }
 
     override suspend fun getOfferings(): BillingResult<com.devindie.myday.billing.api.BillingOfferings> =
         suspendCancellableCoroutine { continuation ->
@@ -84,36 +83,35 @@ internal class RevenueCatBillingProvider : BillingProvider {
             )
         }
 
-    override fun observeCustomerInfo(): Flow<BillingCustomerInfo> =
-        callbackFlow {
-            val delegate =
-                object : PurchasesDelegate {
-                    override fun onCustomerInfoUpdated(customerInfo: CustomerInfo) {
-                        trySend(customerInfo.toBillingCustomerInfo())
-                    }
-
-                    override fun onPurchasePromoProduct(
-                        product: StoreProduct,
-                        startPurchase: (
-                            onError: (error: PurchasesError, userCancelled: Boolean) -> Unit,
-                            onSuccess: (storeTransaction: StoreTransaction, customerInfo: CustomerInfo) -> Unit,
-                        ) -> Unit,
-                    ) = Unit
-                }
-            purchases.delegate = delegate
-            purchases.getCustomerInfo(
-                fetchPolicy = CacheFetchPolicy.default(),
-                onError = { /* initial emission skipped on error */ },
-                onSuccess = { customerInfo ->
+    override fun observeCustomerInfo(): Flow<BillingCustomerInfo> = callbackFlow {
+        val delegate =
+            object : PurchasesDelegate {
+                override fun onCustomerInfoUpdated(customerInfo: CustomerInfo) {
                     trySend(customerInfo.toBillingCustomerInfo())
-                },
-            )
-            awaitClose {
-                if (purchases.delegate == delegate) {
-                    purchases.delegate = null
                 }
+
+                override fun onPurchasePromoProduct(
+                    product: StoreProduct,
+                    startPurchase: (
+                        onError: (error: PurchasesError, userCancelled: Boolean) -> Unit,
+                        onSuccess: (storeTransaction: StoreTransaction, customerInfo: CustomerInfo) -> Unit,
+                    ) -> Unit,
+                ) = Unit
+            }
+        purchases.delegate = delegate
+        purchases.getCustomerInfo(
+            fetchPolicy = CacheFetchPolicy.default(),
+            onError = { /* initial emission skipped on error */ },
+            onSuccess = { customerInfo ->
+                trySend(customerInfo.toBillingCustomerInfo())
+            },
+        )
+        awaitClose {
+            if (purchases.delegate == delegate) {
+                purchases.delegate = null
             }
         }
+    }
 
     override suspend fun logIn(appUserId: String): BillingResult<BillingCustomerInfo> =
         suspendCancellableCoroutine { continuation ->
@@ -128,30 +126,28 @@ internal class RevenueCatBillingProvider : BillingProvider {
             )
         }
 
-    override suspend fun logOut(): BillingResult<BillingCustomerInfo> =
-        suspendCancellableCoroutine { continuation ->
-            purchases.logOut(
-                onError = { error ->
-                    continuation.resume(BillingResult.Failure(error.toBillingStoreError()))
-                },
-                onSuccess = { customerInfo ->
-                    continuation.resume(BillingResult.Success(customerInfo.toBillingCustomerInfo()))
-                },
-            )
-        }
+    override suspend fun logOut(): BillingResult<BillingCustomerInfo> = suspendCancellableCoroutine { continuation ->
+        purchases.logOut(
+            onError = { error ->
+                continuation.resume(BillingResult.Failure(error.toBillingStoreError()))
+            },
+            onSuccess = { customerInfo ->
+                continuation.resume(BillingResult.Success(customerInfo.toBillingCustomerInfo()))
+            },
+        )
+    }
 
-    private suspend fun fetchCustomerInfo(): BillingResult<CustomerInfo> =
-        suspendCancellableCoroutine { continuation ->
-            purchases.getCustomerInfo(
-                fetchPolicy = CacheFetchPolicy.default(),
-                onError = { error ->
-                    continuation.resume(BillingResult.Failure(error.toBillingStoreError()))
-                },
-                onSuccess = { customerInfo ->
-                    continuation.resume(BillingResult.Success(customerInfo))
-                },
-            )
-        }
+    private suspend fun fetchCustomerInfo(): BillingResult<CustomerInfo> = suspendCancellableCoroutine { continuation ->
+        purchases.getCustomerInfo(
+            fetchPolicy = CacheFetchPolicy.default(),
+            onError = { error ->
+                continuation.resume(BillingResult.Failure(error.toBillingStoreError()))
+            },
+            onSuccess = { customerInfo ->
+                continuation.resume(BillingResult.Success(customerInfo))
+            },
+        )
+    }
 
     private suspend fun findRevenueCatPackage(packageId: String): Package? =
         suspendCancellableCoroutine { continuation ->

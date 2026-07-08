@@ -1,10 +1,7 @@
 package com.devindie.myday.analytics.api.provider
 
 interface CrashReportingProvider {
-    fun recordException(
-        throwable: Throwable,
-        message: String?,
-    )
+    fun recordException(throwable: Throwable, message: String?)
 
     fun log(message: String)
 

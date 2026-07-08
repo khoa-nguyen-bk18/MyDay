@@ -12,13 +12,12 @@ import kotlinx.coroutines.flow.flowOf
 internal class NoOpBillingProvider : BillingProvider {
     override suspend fun initialize(): BillingResult<Unit> = BillingResult.Success(Unit)
 
-    override suspend fun getOfferings(): BillingResult<BillingOfferings> =
-        BillingResult.Success(
-            BillingOfferings(
-                current = null,
-                all = emptyMap(),
-            ),
-        )
+    override suspend fun getOfferings(): BillingResult<BillingOfferings> = BillingResult.Success(
+        BillingOfferings(
+            current = null,
+            all = emptyMap(),
+        ),
+    )
 
     override suspend fun purchase(packageId: String): BillingResult<BillingPurchase> =
         BillingResult.Failure(BillingError.NotConfigured)

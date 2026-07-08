@@ -38,6 +38,12 @@ android {
     namespace = "com.devindie.myday"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
+    lint {
+        abortOnError = true
+        warningsAsErrors = false
+        checkDependencies = true
+    }
+
     buildFeatures {
         buildConfig = true
     }

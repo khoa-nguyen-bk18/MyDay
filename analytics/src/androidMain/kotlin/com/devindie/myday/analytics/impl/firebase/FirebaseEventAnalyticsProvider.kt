@@ -5,22 +5,14 @@ import android.os.Bundle
 import com.devindie.myday.analytics.api.provider.EventAnalyticsProvider
 import com.google.firebase.analytics.FirebaseAnalytics
 
-internal class FirebaseEventAnalyticsProvider(
-    context: Context,
-) : EventAnalyticsProvider {
+internal class FirebaseEventAnalyticsProvider(context: Context) : EventAnalyticsProvider {
     private val analytics = FirebaseAnalytics.getInstance(context)
 
-    override fun logEvent(
-        name: String,
-        params: Map<String, Any>,
-    ) {
+    override fun logEvent(name: String, params: Map<String, Any>) {
         analytics.logEvent(name, params.toAnalyticsBundle())
     }
 
-    override fun logScreen(
-        screenName: String,
-        screenClass: String?,
-    ) {
+    override fun logScreen(screenName: String, screenClass: String?) {
         val bundle =
             Bundle().apply {
                 putString(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
@@ -29,10 +21,7 @@ internal class FirebaseEventAnalyticsProvider(
         analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
     }
 
-    override fun setUserProperty(
-        name: String,
-        value: String,
-    ) {
+    override fun setUserProperty(name: String, value: String) {
         analytics.setUserProperty(name, value)
     }
 
@@ -40,17 +29,16 @@ internal class FirebaseEventAnalyticsProvider(
         analytics.setUserId(userId)
     }
 
-    private fun Map<String, Any>.toAnalyticsBundle(): Bundle =
-        Bundle().apply {
-            forEach { (key, value) ->
-                when (value) {
-                    is String -> putString(key, value)
-                    is Int -> putLong(key, value.toLong())
-                    is Long -> putLong(key, value)
-                    is Double -> putDouble(key, value)
-                    is Boolean -> putString(key, value.toString())
-                    else -> Unit
-                }
+    private fun Map<String, Any>.toAnalyticsBundle(): Bundle = Bundle().apply {
+        forEach { (key, value) ->
+            when (value) {
+                is String -> putString(key, value)
+                is Int -> putLong(key, value.toLong())
+                is Long -> putLong(key, value)
+                is Double -> putDouble(key, value)
+                is Boolean -> putString(key, value.toString())
+                else -> Unit
             }
         }
+    }
 }

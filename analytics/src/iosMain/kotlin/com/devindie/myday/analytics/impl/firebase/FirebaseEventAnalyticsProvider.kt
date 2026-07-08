@@ -8,17 +8,11 @@ import dev.gitlive.firebase.analytics.logEvent
 internal class FirebaseEventAnalyticsProvider : EventAnalyticsProvider {
     private val analytics = Firebase.analytics
 
-    override fun logEvent(
-        name: String,
-        params: Map<String, Any>,
-    ) {
+    override fun logEvent(name: String, params: Map<String, Any>) {
         analytics.logEvent(name, params)
     }
 
-    override fun logScreen(
-        screenName: String,
-        screenClass: String?,
-    ) {
+    override fun logScreen(screenName: String, screenClass: String?) {
         val params =
             buildMap<String, Any> {
                 put("screen_name", screenName)
@@ -27,10 +21,7 @@ internal class FirebaseEventAnalyticsProvider : EventAnalyticsProvider {
         analytics.logEvent("screen_view", params)
     }
 
-    override fun setUserProperty(
-        name: String,
-        value: String,
-    ) {
+    override fun setUserProperty(name: String, value: String) {
         analytics.setUserProperty(name, value)
     }
 

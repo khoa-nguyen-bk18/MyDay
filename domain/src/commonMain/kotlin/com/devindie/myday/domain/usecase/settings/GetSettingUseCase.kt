@@ -7,10 +7,8 @@ import com.devindie.myday.domain.repository.SettingsRepository
 import com.devindie.myday.domain.settings.SettingsCatalog
 import com.devindie.myday.domain.usecase.UseCase
 
-class GetSettingUseCase(
-    private val repository: SettingsRepository,
-    private val catalog: SettingsCatalog,
-) : UseCase<SettingKey, SettingValue?> {
+class GetSettingUseCase(private val repository: SettingsRepository, private val catalog: SettingsCatalog) :
+    UseCase<SettingKey, SettingValue?> {
     override suspend fun invoke(parameters: SettingKey): SettingValue? {
         val definition = catalog.definition(parameters) ?: return null
         val kind = definition.defaultValue()

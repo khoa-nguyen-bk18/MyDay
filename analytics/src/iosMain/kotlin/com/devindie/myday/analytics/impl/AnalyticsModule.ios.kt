@@ -6,8 +6,6 @@ import com.devindie.myday.analytics.impl.firebase.FirebaseCrashReportingProvider
 import com.devindie.myday.analytics.impl.firebase.FirebaseEventAnalyticsProvider
 import org.koin.core.scope.Scope
 
-internal actual fun Scope.defaultEventAnalyticsProvider(): EventAnalyticsProvider =
-    FirebaseEventAnalyticsProvider()
+internal actual fun Scope.defaultEventAnalyticsProvider(): EventAnalyticsProvider = FirebaseEventAnalyticsProvider()
 
-internal actual fun Scope.defaultCrashReportingProvider(): CrashReportingProvider =
-    FirebaseCrashReportingProvider()
+internal actual fun Scope.defaultCrashReportingProvider(): CrashReportingProvider = FirebaseCrashReportingProvider()

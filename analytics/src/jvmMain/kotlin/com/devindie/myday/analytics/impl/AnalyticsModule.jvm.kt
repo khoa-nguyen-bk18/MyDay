@@ -6,8 +6,6 @@ import com.devindie.myday.analytics.impl.provider.NoOpCrashReportingProvider
 import com.devindie.myday.analytics.impl.provider.NoOpEventAnalyticsProvider
 import org.koin.core.scope.Scope
 
-internal actual fun Scope.defaultEventAnalyticsProvider(): EventAnalyticsProvider =
-    NoOpEventAnalyticsProvider()
+internal actual fun Scope.defaultEventAnalyticsProvider(): EventAnalyticsProvider = NoOpEventAnalyticsProvider()
 
-internal actual fun Scope.defaultCrashReportingProvider(): CrashReportingProvider =
-    NoOpCrashReportingProvider()
+internal actual fun Scope.defaultCrashReportingProvider(): CrashReportingProvider = NoOpCrashReportingProvider()

@@ -13,21 +13,21 @@ class FakeSettingsCatalog : SettingsCatalog {
                 id = "general",
                 title = "General",
                 definitions =
-                    listOf(
-                        BooleanSettingDefinition(
-                            key = SettingKey("general.notifications"),
-                            title = "Notifications",
-                            description = null,
-                            default = true,
-                        ),
-                        TextSettingDefinition(
-                            key = SettingKey("general.nickname"),
-                            title = "Nickname",
-                            description = null,
-                            default = "Player",
-                            maxLength = 20,
-                        ),
+                listOf(
+                    BooleanSettingDefinition(
+                        key = SettingKey("general.notifications"),
+                        title = "Notifications",
+                        description = null,
+                        default = true,
                     ),
+                    TextSettingDefinition(
+                        key = SettingKey("general.nickname"),
+                        title = "Nickname",
+                        description = null,
+                        default = "Player",
+                        maxLength = 20,
+                    ),
+                ),
             ),
         )
 }

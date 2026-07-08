@@ -12,5 +12,4 @@ internal actual fun Scope.defaultEventAnalyticsProvider(): EventAnalyticsProvide
     return FirebaseEventAnalyticsProvider(context)
 }
 
-internal actual fun Scope.defaultCrashReportingProvider(): CrashReportingProvider =
-    FirebaseCrashReportingProvider()
+internal actual fun Scope.defaultCrashReportingProvider(): CrashReportingProvider = FirebaseCrashReportingProvider()

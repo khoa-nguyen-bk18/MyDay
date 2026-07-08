@@ -3,6 +3,7 @@ import java.net.URI
 import java.util.Properties
 
 apply(from = "gradle/composeCompilerReports.gradle.kts")
+apply(from = "gradle/quality.gradle.kts")
 
 plugins {
     alias(libs.plugins.sonarqube)
@@ -19,6 +20,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.kotlinxSerialization) apply false
     alias(libs.plugins.spotless)
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.androidx.room) apply false
     alias(libs.plugins.stability.analyzer) apply false
@@ -66,7 +68,10 @@ sonar {
         )
         property(
             "sonar.coverage.jacoco.xmlReportPaths",
-            layout.buildDirectory.file("reports/kover/report.xml").get().asFile.path,
+            layout.buildDirectory
+                .file("reports/kover/report.xml")
+                .get()
+                .asFile.path,
         )
     }
 }
@@ -82,23 +87,32 @@ spotless {
             "**/build/**",
             "**/iosApp/**",
         )
-        ktlint(libs.versions.ktlint.get()).editorConfigOverride(
-            mapOf(
-                "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
-                "max_line_length" to "120",
-            ),
-        )
+        ktlint(libs.versions.ktlint.get())
+            .setEditorConfigPath("$rootDir/.editorconfig")
+            .editorConfigOverride(mapOf("android" to "true"))
     }
     kotlinGradle {
         target("**/*.gradle.kts")
         targetExclude("**/build/**")
-        ktlint(libs.versions.ktlint.get()).editorConfigOverride(
-            mapOf(
-                "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
-                "max_line_length" to "120",
-            ),
-        )
+        ktlint(libs.versions.ktlint.get())
+            .setEditorConfigPath("$rootDir/.editorconfig")
     }
+}
+
+ktlint {
+    version.set(libs.versions.ktlint.get())
+    android.set(true)
+    ignoreFailures.set(false)
+    filter {
+        exclude("**/build/**")
+        exclude("**/iosApp/**")
+    }
+    additionalEditorconfig.set(
+        mapOf(
+            "ktlint_function_naming_ignore_when_annotated_with" to "Composable,Preview",
+            "ktlint_standard_filename" to "disabled",
+        ),
+    )
 }
 
 subprojects {
@@ -151,7 +165,11 @@ tasks.register("qualityCheck") {
 
 val dockerComposeFile = rootProject.layout.projectDirectory.file("docker-compose.yml")
 
-fun registerDockerComposeTask(name: String, description: String, vararg args: String) {
+fun registerDockerComposeTask(
+    name: String,
+    description: String,
+    vararg args: String,
+) {
     tasks.register<Exec>(name) {
         group = "sonarqube"
         this.description = description
@@ -184,8 +202,9 @@ tasks.register("sonarWait") {
         if (file.exists()) {
             file.inputStream().use { props.load(it) }
         }
-        val hostUrl = props.getProperty("SONAR_HOST_URL")?.trim()?.takeIf { it.isNotEmpty() }
-            ?: "http://localhost:9000"
+        val hostUrl =
+            props.getProperty("SONAR_HOST_URL")?.trim()?.takeIf { it.isNotEmpty() }
+                ?: "http://localhost:9000"
         val statusUrl = URI("$hostUrl/api/system/status").toURL()
         val deadlineMs = System.currentTimeMillis() + 5 * 60 * 1000
         while (System.currentTimeMillis() < deadlineMs) {
@@ -250,6 +269,7 @@ tasks.register("sonarAnalysis") {
         if (file.exists()) {
             file.inputStream().use { props.load(it) }
         }
+
         fun prop(name: String): String? = props.getProperty(name)?.trim()?.takeIf { it.isNotEmpty() }
 
         val token = prop("SONAR_TOKEN")

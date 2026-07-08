@@ -1,6 +1,9 @@
 # Gradle
 .gradle/
 build/
+bin/
+out/
+.cursor/hooks/.state/
 !gradle/wrapper/gradle-wrapper.jar
 
 # Kotlin

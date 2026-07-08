@@ -48,22 +48,13 @@ class AnalyticsClientImplTest {
     fun providerFailure_doesNotThrow() {
         val events =
             object : EventAnalyticsProvider {
-                override fun logEvent(
-                    name: String,
-                    params: Map<String, Any>,
-                ) {
+                override fun logEvent(name: String, params: Map<String, Any>) {
                     error("provider down")
                 }
 
-                override fun logScreen(
-                    screenName: String,
-                    screenClass: String?,
-                ) = Unit
+                override fun logScreen(screenName: String, screenClass: String?) = Unit
 
-                override fun setUserProperty(
-                    name: String,
-                    value: String,
-                ) = Unit
+                override fun setUserProperty(name: String, value: String) = Unit
 
                 override fun setUserId(userId: String?) = Unit
             }
@@ -80,23 +71,14 @@ private class RecordingEventProvider : EventAnalyticsProvider {
     var lastEventParams: Map<String, Any> = emptyMap()
     var lastUserId: String? = null
 
-    override fun logEvent(
-        name: String,
-        params: Map<String, Any>,
-    ) {
+    override fun logEvent(name: String, params: Map<String, Any>) {
         lastEventName = name
         lastEventParams = params
     }
 
-    override fun logScreen(
-        screenName: String,
-        screenClass: String?,
-    ) = Unit
+    override fun logScreen(screenName: String, screenClass: String?) = Unit
 
-    override fun setUserProperty(
-        name: String,
-        value: String,
-    ) = Unit
+    override fun setUserProperty(name: String, value: String) = Unit
 
     override fun setUserId(userId: String?) {
         lastUserId = userId
@@ -108,10 +90,7 @@ private class RecordingCrashProvider : CrashReportingProvider {
     var lastMessage: String? = null
     var lastUserId: String? = null
 
-    override fun recordException(
-        throwable: Throwable,
-        message: String?,
-    ) {
+    override fun recordException(throwable: Throwable, message: String?) {
         lastThrowable = throwable
         lastMessage = message
     }

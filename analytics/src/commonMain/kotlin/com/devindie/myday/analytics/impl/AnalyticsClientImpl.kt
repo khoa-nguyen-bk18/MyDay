@@ -8,28 +8,19 @@ internal class AnalyticsClientImpl(
     private val eventProvider: EventAnalyticsProvider,
     private val crashProvider: CrashReportingProvider,
 ) : AnalyticsClient {
-    override fun logEvent(
-        name: String,
-        params: Map<String, Any>,
-    ) {
+    override fun logEvent(name: String, params: Map<String, Any>) {
         runSafely("logEvent") {
             eventProvider.logEvent(name, params)
         }
     }
 
-    override fun logScreen(
-        screenName: String,
-        screenClass: String?,
-    ) {
+    override fun logScreen(screenName: String, screenClass: String?) {
         runSafely("logScreen") {
             eventProvider.logScreen(screenName, screenClass)
         }
     }
 
-    override fun setUserProperty(
-        name: String,
-        value: String,
-    ) {
+    override fun setUserProperty(name: String, value: String) {
         runSafely("setUserProperty") {
             eventProvider.setUserProperty(name, value)
         }
@@ -42,10 +33,7 @@ internal class AnalyticsClientImpl(
         }
     }
 
-    override fun recordException(
-        throwable: Throwable,
-        message: String?,
-    ) {
+    override fun recordException(throwable: Throwable, message: String?) {
         runSafely("recordException") {
             crashProvider.recordException(throwable, message)
         }
@@ -57,10 +45,7 @@ internal class AnalyticsClientImpl(
         }
     }
 
-    private inline fun runSafely(
-        operation: String,
-        block: () -> Unit,
-    ) {
+    private inline fun runSafely(operation: String, block: () -> Unit) {
         try {
             block()
         } catch (@Suppress("TooGenericExceptionCaught") error: Exception) {

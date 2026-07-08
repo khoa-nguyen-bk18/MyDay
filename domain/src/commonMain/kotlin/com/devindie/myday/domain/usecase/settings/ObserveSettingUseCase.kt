@@ -8,10 +8,7 @@ import com.devindie.myday.domain.settings.SettingsCatalog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class ObserveSettingUseCase(
-    private val repository: SettingsRepository,
-    private val catalog: SettingsCatalog,
-) {
+class ObserveSettingUseCase(private val repository: SettingsRepository, private val catalog: SettingsCatalog) {
     operator fun invoke(key: SettingKey): Flow<SettingValue?> {
         val definition = catalog.definition(key)
         if (definition == null) {

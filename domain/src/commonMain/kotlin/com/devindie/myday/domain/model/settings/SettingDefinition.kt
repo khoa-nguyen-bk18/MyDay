@@ -64,13 +64,12 @@ data class MultiChoiceSettingDefinition(
     val defaultOptionIds: Set<String>,
 ) : SettingDefinition
 
-fun SettingDefinition.defaultValue(): SettingValue =
-    when (this) {
-        is BooleanSettingDefinition -> SettingValue.BooleanValue(default)
-        is TextSettingDefinition -> SettingValue.TextValue(default)
-        is IntSettingDefinition -> SettingValue.IntValue(default)
-        is LongSettingDefinition -> SettingValue.LongValue(default)
-        is DoubleSettingDefinition -> SettingValue.DoubleValue(default)
-        is SingleChoiceSettingDefinition -> SettingValue.SingleChoiceValue(defaultOptionId)
-        is MultiChoiceSettingDefinition -> SettingValue.MultiChoiceValue(defaultOptionIds)
-    }
+fun SettingDefinition.defaultValue(): SettingValue = when (this) {
+    is BooleanSettingDefinition -> SettingValue.BooleanValue(default)
+    is TextSettingDefinition -> SettingValue.TextValue(default)
+    is IntSettingDefinition -> SettingValue.IntValue(default)
+    is LongSettingDefinition -> SettingValue.LongValue(default)
+    is DoubleSettingDefinition -> SettingValue.DoubleValue(default)
+    is SingleChoiceSettingDefinition -> SettingValue.SingleChoiceValue(defaultOptionId)
+    is MultiChoiceSettingDefinition -> SettingValue.MultiChoiceValue(defaultOptionIds)
+}

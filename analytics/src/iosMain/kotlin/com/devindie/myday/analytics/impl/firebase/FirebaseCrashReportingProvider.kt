@@ -7,10 +7,7 @@ import dev.gitlive.firebase.crashlytics.crashlytics
 internal class FirebaseCrashReportingProvider : CrashReportingProvider {
     private val crashlytics = Firebase.crashlytics
 
-    override fun recordException(
-        throwable: Throwable,
-        message: String?,
-    ) {
+    override fun recordException(throwable: Throwable, message: String?) {
         message?.let { crashlytics.log(it) }
         crashlytics.recordException(throwable)
     }

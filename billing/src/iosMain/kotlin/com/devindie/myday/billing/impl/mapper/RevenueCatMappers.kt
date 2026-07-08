@@ -29,48 +29,43 @@ internal fun CustomerInfo.toBillingCustomerInfo(): BillingCustomerInfo {
     )
 }
 
-internal fun Offerings.toBillingOfferings(): BillingOfferings =
-    BillingOfferings(
-        current = current?.toBillingOffering(),
-        all = all.mapValues { (_, offering) -> offering.toBillingOffering() },
-    )
+internal fun Offerings.toBillingOfferings(): BillingOfferings = BillingOfferings(
+    current = current?.toBillingOffering(),
+    all = all.mapValues { (_, offering) -> offering.toBillingOffering() },
+)
 
-private fun Offering.toBillingOffering(): BillingOffering =
-    BillingOffering(
-        identifier = identifier,
-        packages = availablePackages.map { it.toBillingPackage() },
-    )
+private fun Offering.toBillingOffering(): BillingOffering = BillingOffering(
+    identifier = identifier,
+    packages = availablePackages.map { it.toBillingPackage() },
+)
 
-private fun Package.toBillingPackage(): BillingPackage =
-    BillingPackage(
-        identifier = identifier,
-        productId = storeProduct.id,
-        title = storeProduct.title,
-        description = storeProduct.localizedDescription.orEmpty(),
-        priceFormatted = storeProduct.price.formatted,
-        packageType = packageType.toBillingPackageType(),
-    )
+private fun Package.toBillingPackage(): BillingPackage = BillingPackage(
+    identifier = identifier,
+    productId = storeProduct.id,
+    title = storeProduct.title,
+    description = storeProduct.localizedDescription.orEmpty(),
+    priceFormatted = storeProduct.price.formatted,
+    packageType = packageType.toBillingPackageType(),
+)
 
-private fun PackageType.toBillingPackageType(): BillingPackageType =
-    when (this) {
-        PackageType.UNKNOWN -> BillingPackageType.UNKNOWN
-        PackageType.CUSTOM -> BillingPackageType.CUSTOM
-        PackageType.LIFETIME -> BillingPackageType.LIFETIME
-        PackageType.ANNUAL -> BillingPackageType.ANNUAL
-        PackageType.SIX_MONTH -> BillingPackageType.SIX_MONTH
-        PackageType.THREE_MONTH -> BillingPackageType.THREE_MONTH
-        PackageType.TWO_MONTH -> BillingPackageType.TWO_MONTH
-        PackageType.MONTHLY -> BillingPackageType.MONTHLY
-        PackageType.WEEKLY -> BillingPackageType.WEEKLY
-    }
+private fun PackageType.toBillingPackageType(): BillingPackageType = when (this) {
+    PackageType.UNKNOWN -> BillingPackageType.UNKNOWN
+    PackageType.CUSTOM -> BillingPackageType.CUSTOM
+    PackageType.LIFETIME -> BillingPackageType.LIFETIME
+    PackageType.ANNUAL -> BillingPackageType.ANNUAL
+    PackageType.SIX_MONTH -> BillingPackageType.SIX_MONTH
+    PackageType.THREE_MONTH -> BillingPackageType.THREE_MONTH
+    PackageType.TWO_MONTH -> BillingPackageType.TWO_MONTH
+    PackageType.MONTHLY -> BillingPackageType.MONTHLY
+    PackageType.WEEKLY -> BillingPackageType.WEEKLY
+}
 
 @OptIn(ExperimentalTime::class)
-internal fun StoreTransaction.toBillingPurchase(customerInfo: CustomerInfo): BillingPurchase =
-    BillingPurchase(
-        productId = productIds.firstOrNull().orEmpty(),
-        transactionId = transactionId,
-        customerInfo = customerInfo.toBillingCustomerInfo(),
-    )
+internal fun StoreTransaction.toBillingPurchase(customerInfo: CustomerInfo): BillingPurchase = BillingPurchase(
+    productId = productIds.firstOrNull().orEmpty(),
+    transactionId = transactionId,
+    customerInfo = customerInfo.toBillingCustomerInfo(),
+)
 
 internal fun PurchasesError.toBillingStoreError(): com.devindie.myday.billing.api.BillingError.StoreError =
     com.devindie.myday.billing.api.BillingError.StoreError(
