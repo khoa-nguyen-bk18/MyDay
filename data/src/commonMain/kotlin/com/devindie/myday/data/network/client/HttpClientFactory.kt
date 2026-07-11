@@ -45,6 +45,13 @@ class HttpClientFactory(
         }
     }
 
+    fun createOpenRouterClient(): HttpClient = HttpClient(engineFactory()) {
+        expectSuccess = true
+        install(ContentNegotiation) {
+            json(json)
+        }
+    }
+
     fun createAuthenticatedClient(tokenRefreshDataSource: TokenRefreshDataSource): HttpClient =
         HttpClient(engineFactory()) {
             expectSuccess = true

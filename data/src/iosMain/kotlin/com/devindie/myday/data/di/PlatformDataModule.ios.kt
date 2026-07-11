@@ -6,6 +6,10 @@ import com.devindie.myday.data.coroutines.IosDispatcherProvider
 import com.devindie.myday.data.local.browse.getBrowseDatabaseBuilder
 import com.devindie.myday.data.onboarding.OnboardingRepositoryImpl
 import com.devindie.myday.data.onboarding.createOnboardingDataStore
+import com.devindie.myday.data.reflection.createDraftDataStore
+import com.devindie.myday.data.reflection.createReflectionPrefsDataStore
+import com.devindie.myday.data.reflection.createVaultLinkDataStore
+import com.devindie.myday.data.reflection.reflectionDataModule
 import com.devindie.myday.data.settings.SettingsRepositoryImpl
 import com.devindie.myday.data.settings.createSettingsDataStore
 import com.devindie.myday.data.source.local.browse.BrowseCardLocalDataSource
@@ -15,6 +19,7 @@ import com.devindie.myday.data.source.local.browse.BrowseDatabase
 import com.devindie.myday.data.source.local.browse.CardDetailRepositoryImpl
 import com.devindie.myday.data.source.local.browse.getBrowseDatabase
 import com.devindie.myday.data.source.startup.AppStartupRepositoryImpl
+import com.devindie.myday.domain.reflection.ReflectionInjection
 import com.devindie.myday.domain.repository.AppStartupRepository
 import com.devindie.myday.domain.repository.CardDetailRepository
 import com.devindie.myday.domain.repository.OnboardingRepository
@@ -22,6 +27,7 @@ import com.devindie.myday.domain.repository.SettingsRepository
 import com.devindie.myday.domain.repository.UserRepository
 import eu.anifantakis.lib.ksafe.KSafe
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 actual fun platformDataModule(): Module = module {
@@ -61,4 +67,8 @@ actual fun platformDataModule(): Module = module {
     single<OnboardingRepository> { OnboardingRepositoryImpl(dataStore = get()) }
     single { createSettingsDataStore() }
     single<SettingsRepository> { SettingsRepositoryImpl(dataStore = get()) }
+    single(named(ReflectionInjection.REFLECTION_PREFS_DATASTORE)) { createReflectionPrefsDataStore() }
+    single(named(ReflectionInjection.VAULT_LINK_DATASTORE)) { createVaultLinkDataStore() }
+    single(named(ReflectionInjection.DRAFT_DATASTORE)) { createDraftDataStore() }
+    includes(reflectionDataModule())
 }
