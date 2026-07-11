@@ -16,7 +16,7 @@ import androidx.navigation.compose.composable
 import com.devindie.myday.core.navigation.MainRoute
 import com.devindie.myday.feature.browse.api.browseDestination
 import com.devindie.myday.feature.carddetail.api.cardDetailDestination
-import com.devindie.myday.feature.collection.api.collectionDestination
+import com.devindie.myday.feature.dailyreflection.api.reflectDestination
 import com.devindie.myday.feature.main.impl.EmptyTabContent
 import com.devindie.myday.feature.main.impl.ProfileScreen
 import com.devindie.myday.feature.settings.api.SettingsRoute
@@ -62,12 +62,6 @@ fun NavGraphBuilder.cartDestination() {
     }
 }
 
-// fun NavGraphBuilder.collectionDestination() {
-//    composable<MainRoute.Collection> {
-//        EmptyTabContent(modifier = Modifier.fillMaxSize())
-//    }
-// }
-
 fun NavGraphBuilder.profileDestination(onNavigateToSettings: () -> Unit) {
     composable<MainRoute.Profile> {
         ProfileScreen(onNavigateToSettings = onNavigateToSettings)
@@ -85,9 +79,7 @@ fun NavGraphBuilder.mainTabNavGraph(
         onNavigateToCardDetail = onNavigateToCardDetail,
     )
     cartDestination()
-    collectionDestination(
-        onNavigateToCardDetail = onNavigateToCardDetail,
-    )
+    reflectDestination()
     profileDestination(onNavigateToSettings = onNavigateToSettings)
     settingsDestination(onBack = onDismissSettings)
     cardDetailDestination(

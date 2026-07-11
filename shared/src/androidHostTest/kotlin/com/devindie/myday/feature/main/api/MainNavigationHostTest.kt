@@ -53,7 +53,7 @@ class MainNavigationHostTest {
             )
         }
         cartDestination()
-        composable<MainRoute.Collection> {
+        composable<MainRoute.Reflect> {
             EmptyTabContent(modifier = Modifier.fillMaxSize())
         }
         composable<MainRoute.Profile> {

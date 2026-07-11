@@ -2,13 +2,13 @@ package com.devindie.myday.feature.main.api
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingBasket
-import androidx.compose.material.icons.filled.Style
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.ShoppingBasket
-import androidx.compose.material.icons.outlined.Style
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.devindie.myday.core.navigation.MainRoute
 
@@ -31,11 +31,11 @@ enum class MainDestination(
         selectedIcon = Icons.Filled.ShoppingBasket,
         unselectedIcon = Icons.Outlined.ShoppingBasket,
     ),
-    Collection(
-        route = MainRoute.Collection,
-        label = "Collection",
-        selectedIcon = Icons.Filled.Style,
-        unselectedIcon = Icons.Outlined.Style,
+    Reflect(
+        route = MainRoute.Reflect,
+        label = "Reflect",
+        selectedIcon = Icons.Filled.AutoAwesome,
+        unselectedIcon = Icons.Outlined.AutoAwesome,
     ),
     Profile(
         route = MainRoute.Profile,

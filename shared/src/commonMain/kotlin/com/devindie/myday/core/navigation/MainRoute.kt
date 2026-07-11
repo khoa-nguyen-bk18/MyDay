@@ -12,7 +12,7 @@ sealed interface MainRoute {
     data object Cart : MainRoute
 
     @Serializable
-    data object Collection : MainRoute
+    data object Reflect : MainRoute
 
     @Serializable
     data object Profile : MainRoute

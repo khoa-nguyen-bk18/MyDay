@@ -27,7 +27,7 @@ import com.devindie.myday.domain.usecase.user.SaveUserSessionUseCase
 import com.devindie.myday.feature.apppromotion.api.appPromotionFeatureModule
 import com.devindie.myday.feature.browse.api.browseFeatureModule
 import com.devindie.myday.feature.carddetail.api.cardDetailFeatureModule
-import com.devindie.myday.feature.collection.api.collectionFeatureModule
+import com.devindie.myday.feature.dailyreflection.api.dailyReflectionFeatureModule
 import com.devindie.myday.feature.legal.api.legalFeatureModule
 import com.devindie.myday.feature.main.api.mainFeatureModule
 import com.devindie.myday.feature.onboarding.api.onboardingFeatureModule
@@ -104,7 +104,7 @@ val appDomainModule =
             browseFeatureModule,
             cardDetailFeatureModule,
             mainFeatureModule,
-            collectionFeatureModule,
+            dailyReflectionFeatureModule,
             splashFeatureModule,
             onboardingFeatureModule,
             legalFeatureModule,
