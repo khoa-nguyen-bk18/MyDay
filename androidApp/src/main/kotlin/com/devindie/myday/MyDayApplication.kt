@@ -8,24 +8,17 @@ import com.devindie.myday.billing.configureBillingPlatform
 import com.devindie.myday.browsePagingModule
 import com.devindie.myday.core.di.startKoinApp
 import com.devindie.myday.data.di.platformDataModule
-import com.devindie.myday.domain.reflection.ReflectionInjection
-import com.devindie.myday.domain.usecase.reflection.EnsureReflectionScheduleUseCase
+import com.devindie.myday.feature.dailyreflection.REFLECTION_DEBUG_TOOLS_QUALIFIER
+import com.devindie.myday.feature.dailyreflection.bootstrapReflectionSchedule
 import com.devindie.myday.settings.settingsCatalogModule
 import com.devindie.myday.storage.AndroidStoragePickerHost
 import com.devindie.myday.storage.api.StorageConfig
 import com.devindie.myday.storage.api.storageFeatureModule
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
-import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 class MyDayApplication : Application() {
-    private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-
     override fun onCreate() {
         super.onCreate()
 
@@ -57,15 +50,13 @@ class MyDayApplication : Application() {
                     ),
                 ),
                 module {
-                    single(named(ReflectionInjection.DEBUG_TOOLS)) { BuildConfig.DEBUG }
+                    single(named(REFLECTION_DEBUG_TOOLS_QUALIFIER)) { BuildConfig.DEBUG }
                 },
             ),
         ) {
             androidContext(this@MyDayApplication)
         }
 
-        appScope.launch {
-            runCatching { get<EnsureReflectionScheduleUseCase>()() }
-        }
+        bootstrapReflectionSchedule()
     }
 }

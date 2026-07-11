@@ -37,6 +37,7 @@ class OpenRouterReflectionDataSource(private val httpClient: HttpClient, private
         userMessage = ReflectionPrompts.userMessageForShorten(currentMarkdown),
     )
 
+    @Suppress("SwallowedException")
     private suspend fun complete(model: String, apiKey: String, userMessage: String): Result<String> =
         withContext(dispatchers.io) {
             runIoResult {

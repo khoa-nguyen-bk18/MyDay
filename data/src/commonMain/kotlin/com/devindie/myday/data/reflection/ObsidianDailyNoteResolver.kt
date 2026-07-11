@@ -8,7 +8,10 @@ import com.devindie.myday.domain.reflection.MomentDatePathFormatter
 internal const val PERIODIC_NOTES_CONFIG_PATH = ".obsidian/plugins/periodic-notes/data.json"
 internal const val CORE_DAILY_NOTES_CONFIG_PATH = ".obsidian/daily-notes.json"
 
+private const val ISO_DATE_PARTS = 3
+
 class ObsidianDailyNoteResolver(private val reader: VaultFileReader) {
+    @Suppress("ReturnCount")
     suspend fun resolve(date: IsoDate): DailyNoteRef {
         val (year, month, day) = parseIsoDate(date)
         resolvePeriodic(date, year, month, day)?.let { return it }
@@ -20,6 +23,7 @@ class ObsidianDailyNoteResolver(private val reader: VaultFileReader) {
         )
     }
 
+    @Suppress("ReturnCount")
     private suspend fun resolvePeriodic(date: IsoDate, year: Int, month: Int, day: Int): DailyNoteRef? {
         val raw = reader.readTextOrNull(PERIODIC_NOTES_CONFIG_PATH) ?: return null
         val config = parsePeriodicNotesConfig(raw) ?: return null
@@ -27,6 +31,7 @@ class ObsidianDailyNoteResolver(private val reader: VaultFileReader) {
         return pathRef(date, config.folder, config.format, year, month, day, DailyNoteResolution.PeriodicNotes)
     }
 
+    @Suppress("ReturnCount")
     private suspend fun resolveCore(date: IsoDate, year: Int, month: Int, day: Int): DailyNoteRef? {
         val raw = reader.readTextOrNull(CORE_DAILY_NOTES_CONFIG_PATH) ?: return null
         val config = parseObsidianDailyNotesConfig(raw) ?: return null
@@ -55,7 +60,7 @@ class ObsidianDailyNoteResolver(private val reader: VaultFileReader) {
 
     private fun parseIsoDate(date: IsoDate): Triple<Int, Int, Int> {
         val parts = date.split("-")
-        require(parts.size == 3) { "Invalid IsoDate: $date" }
+        require(parts.size == ISO_DATE_PARTS) { "Invalid IsoDate: $date" }
         return Triple(parts[0].toInt(), parts[1].toInt(), parts[2].toInt())
     }
 }

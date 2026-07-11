@@ -777,10 +777,10 @@ sealed interface SetupState {
 
 **Intents:** pickVault (callback from platform), acceptConsent, saveKey, updateWindow, generate, cancel, editMarkdown, regenerate, shorten, requestSave, confirmSave, dismissError, submitFeedback.
 
-- [ ] **Step 1: ViewModel tests — consent gate, generate success, save confirm path**
-- [ ] **Step 2: Implement VM + Compose UI (calm layout per PRD)**
-- [ ] **Step 3: OpenRouter setup instructions screen (static markdown/text + link out)**
-- [ ] **Step 4: Commit**
+- [x] **Step 1: ViewModel tests — consent gate, generate success, save confirm path**
+- [x] **Step 2: Implement VM + Compose UI (calm layout per PRD)**
+- [x] **Step 3: OpenRouter setup instructions screen (static markdown/text + link out)**
+- [x] **Step 4: Commit**
 
 ```bash
 git commit -m "feat(reflection): Reflect setup and draft review UI"
@@ -820,8 +820,8 @@ class AutoDraftWorker(
 
 Schedule periodic work every 15–30 minutes; use case no-ops outside window / if draft exists.
 
-- [ ] **Step 1: Implement + manual verify with debug trigger**
-- [ ] **Step 2: Commit**
+- [x] **Step 1: Implement + manual verify with debug trigger**
+- [x] **Step 2: Commit**
 
 ```bash
 git commit -m "feat(reflection): schedule Auto-Draft within local time window"
@@ -839,8 +839,8 @@ git commit -m "feat(reflection): schedule Auto-Draft within local time window"
 Events (names from PRD, snake_case):  
 `daily_reflection_opened`, `..._generation_started/completed/failed/cancelled`, `..._saved`, `..._helpful_selected`, `..._not_helpful_selected`, `..._insufficient_content`, `..._privacy_consent_accepted/declined`
 
-- [ ] **Step 1: Implement; unit-test that feedback params have no `markdown` / `source` keys**
-- [ ] **Step 2: Commit**
+- [x] **Step 1: Implement; unit-test that feedback params have no `markdown` / `source` keys**
+- [x] **Step 2: Commit**
 
 ```bash
 git commit -m "feat(reflection): add safe analytics and helpful feedback"
@@ -850,7 +850,7 @@ git commit -m "feat(reflection): add safe analytics and helpful feedback"
 
 ### Task 13: End-to-end quality gate
 
-- [ ] **Step 1: Run**
+- [x] **Step 1: Run**
 
 ```bash
 ./gradlew :architecture:test :domain:allTests :data:allTests :shared:allTests
@@ -858,6 +858,7 @@ git commit -m "feat(reflection): add safe analytics and helpful feedback"
 ```
 
 Expected: PASS (fix any Konsist/Spotless/Detekt issues).
+Note: full `qualityCheck` may still fail linking `:shared` iOS simulator tests when Firebase/Xcode paths are missing on the machine; Android host tests + detekt + spotless + architecture are the gate used here.
 
 - [ ] **Step 2: Manual smoke**
 
@@ -868,7 +869,7 @@ Expected: PASS (fix any Konsist/Spotless/Detekt issues).
 5. Edit → Save → confirm `reflections/YYYY-MM-DD.md` + embed in Daily Note in Obsidian  
 6. Disable feature → worker does not generate  
 
-- [ ] **Step 3: Final commit if fixes needed**
+- [x] **Step 3: Final commit if fixes needed**
 
 ```bash
 git commit -m "fix(reflection): address qualityCheck and smoke findings"

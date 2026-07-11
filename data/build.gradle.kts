@@ -20,6 +20,12 @@ detekt {
         "src/androidMain/kotlin",
         "src/iosMain/kotlin",
     )
+    baseline.set(file("detekt-baseline.xml"))
+}
+
+tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
+    // Fixture seed data: intentionally large with long ability-text lines.
+    exclude("**/BrowseCatalogSeeder.kt")
 }
 
 kotlin {

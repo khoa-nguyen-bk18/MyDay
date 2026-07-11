@@ -520,7 +520,7 @@ private fun GeneratingOverlay(onCancel: () -> Unit) {
 private fun formatMinuteOfDay(minute: Int): String {
     val hours = minute / 60
     val minutes = minute % 60
-    return "%02d:%02d".format(hours, minutes)
+    return "${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}"
 }
 
 @Preview

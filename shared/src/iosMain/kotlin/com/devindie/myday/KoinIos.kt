@@ -7,17 +7,12 @@ import com.devindie.myday.billing.billingConfigForIos
 import com.devindie.myday.browsePagingModule
 import com.devindie.myday.core.di.startKoinApp
 import com.devindie.myday.data.di.platformDataModule
-import com.devindie.myday.domain.reflection.ReflectionInjection
-import com.devindie.myday.domain.usecase.reflection.EnsureReflectionScheduleUseCase
+import com.devindie.myday.feature.dailyreflection.REFLECTION_DEBUG_TOOLS_QUALIFIER
+import com.devindie.myday.feature.dailyreflection.bootstrapReflectionSchedule
 import com.devindie.myday.settings.settingsCatalogModule
 import com.devindie.myday.storage.storageKoinModuleForIos
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import org.koin.mp.KoinPlatform.getKoin
 
 fun doInitKoin() {
     startKoinApp(
@@ -30,11 +25,9 @@ fun doInitKoin() {
             billingFeatureModule(billingConfigForIos()),
             storageKoinModuleForIos(),
             module {
-                single(named(ReflectionInjection.DEBUG_TOOLS)) { false }
+                single(named(REFLECTION_DEBUG_TOOLS_QUALIFIER)) { false }
             },
         ),
     )
-    CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
-        runCatching { getKoin().get<EnsureReflectionScheduleUseCase>()() }
-    }
+    bootstrapReflectionSchedule()
 }

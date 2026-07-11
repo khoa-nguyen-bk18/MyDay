@@ -10,8 +10,11 @@ import platform.Foundation.currentLocale
 import platform.Foundation.date
 import platform.Foundation.timeIntervalSince1970
 
+private const val MINUTES_PER_HOUR = 60
+private const val MILLIS_PER_SECOND = 1_000
+
 @OptIn(ExperimentalForeignApi::class)
-internal actual fun reflectionEpochMillis(): Long = (NSDate().timeIntervalSince1970 * 1_000).toLong()
+internal actual fun reflectionEpochMillis(): Long = (NSDate().timeIntervalSince1970 * MILLIS_PER_SECOND).toLong()
 
 @OptIn(ExperimentalForeignApi::class)
 internal actual fun reflectionTodayIso(): IsoDate {
@@ -24,9 +27,10 @@ internal actual fun reflectionTodayIso(): IsoDate {
 @OptIn(ExperimentalForeignApi::class)
 internal actual fun reflectionMinuteOfDay(): Int {
     val calendar = NSCalendar.currentCalendar
-    val components = calendar.components(
-        unitFlags = platform.Foundation.NSCalendarUnitHour or platform.Foundation.NSCalendarUnitMinute,
-        fromDate = NSDate.date(),
-    )
-    return components.hour.toInt() * 60 + components.minute.toInt()
+    val components =
+        calendar.components(
+            unitFlags = platform.Foundation.NSCalendarUnitHour or platform.Foundation.NSCalendarUnitMinute,
+            fromDate = NSDate.date(),
+        )
+    return components.hour.toInt() * MINUTES_PER_HOUR + components.minute.toInt()
 }
