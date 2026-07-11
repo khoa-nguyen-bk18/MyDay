@@ -1,6 +1,8 @@
 package com.devindie.myday.domain.reflection
 
 object MomentDatePathFormatter {
+    private val leftoverTokenPattern = Regex("""[YyMdHhmsaA]{2,}""")
+
     /**
      * @return relative path including `.md`, or null if [format] has unsupported tokens.
      */
@@ -19,21 +21,21 @@ object MomentDatePathFormatter {
         ) {
             return null
         }
-        var result = format
-        val replacements =
+        val result =
             listOf(
                 "YYYY" to year.toString().padStart(4, '0'),
                 "MM" to month.toString().padStart(2, '0'),
                 "DD" to day.toString().padStart(2, '0'),
                 "HH" to hour.toString().padStart(2, '0'),
                 "mm" to minute.toString().padStart(2, '0'),
-            )
-        for ((token, value) in replacements) {
-            result = result.replace(token, value)
+            ).fold(format) { acc, (token, value) -> acc.replace(token, value) }
+        return when {
+            leftoverTokenPattern.containsMatchIn(result) -> null
+            else -> {
+                val file = if (result.endsWith(".md")) result else "$result.md"
+                val prefix = folder.trim('/').trim()
+                if (prefix.isEmpty()) file else "$prefix/$file"
+            }
         }
-        if (Regex("""[YyMdHhmsaA]{2,}""").containsMatchIn(result)) return null
-        val file = if (result.endsWith(".md")) result else "$result.md"
-        val prefix = folder.trim('/').trim()
-        return if (prefix.isEmpty()) file else "$prefix/$file"
     }
 }
