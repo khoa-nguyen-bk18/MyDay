@@ -1,5 +1,6 @@
 package com.devindie.myday.data.local.browse
 
+import com.devindie.myday.data.source.local.browse.BrowseCardEntity
 import com.devindie.myday.data.source.local.browse.formatPriceCents
 import com.devindie.myday.data.source.local.browse.scaledPriceCents
 import com.devindie.myday.domain.model.browse.BrowseCategory
@@ -69,22 +70,21 @@ fun sampleBrowseCardEntity(
     mpPriceCents: Long = 0,
     hpPriceCents: Long = 0,
     dPriceCents: Long = 0,
-): com.devindie.myday.data.source.local.browse.BrowseCardEntity =
-    _root_ide_package_.com.devindie.myday.data.source.local.browse.BrowseCardEntity(
-        id = id,
-        name = name,
-        setName = setName,
-        condition = condition,
-        priceCents = priceCents,
-        quantity = quantity,
-        category = category.name,
-        gameName = gameName,
-        rarityLabel = rarityLabel,
-        editionLabel = editionLabel,
-        marketPriceCents = marketPriceCents,
-        buylistPriceCents = buylistPriceCents,
-        lpPriceCents = lpPriceCents,
-        mpPriceCents = mpPriceCents,
-        hpPriceCents = hpPriceCents,
-        dPriceCents = dPriceCents,
-    )
+): BrowseCardEntity = BrowseCardEntity(
+    id = id,
+    name = name,
+    setName = setName,
+    condition = condition,
+    priceCents = priceCents,
+    quantity = quantity,
+    category = category.name,
+    gameName = gameName,
+    rarityLabel = rarityLabel,
+    editionLabel = editionLabel,
+    marketPriceCents = marketPriceCents,
+    buylistPriceCents = buylistPriceCents,
+    lpPriceCents = lpPriceCents,
+    mpPriceCents = mpPriceCents,
+    hpPriceCents = hpPriceCents,
+    dPriceCents = dPriceCents,
+)

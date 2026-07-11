@@ -94,6 +94,7 @@ private class FakePagedBrowseCardRemoteDataSource : BrowseCardRemoteDataSource {
         val cards =
             List(pageSize) { index ->
                 BrowseCardDto(
+                    id = ((page - 1) * pageSize + index).toLong(),
                     name = "Card ${(page - 1) * pageSize + index}",
                     setName = "Set",
                     condition = "NM",

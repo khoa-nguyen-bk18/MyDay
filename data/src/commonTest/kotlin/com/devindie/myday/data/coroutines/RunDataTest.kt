@@ -7,5 +7,5 @@ import kotlinx.coroutines.test.runTest
 
 fun runDataTest(testBody: suspend TestScope.(TestDispatcherProvider) -> Unit): TestResult = runTest {
     val provider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
-    testBody(provider)
+    this.testBody(provider)
 }
