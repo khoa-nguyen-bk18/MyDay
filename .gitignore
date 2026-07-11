@@ -15,6 +15,9 @@ local.properties
 # Brainstorm visual companion sessions
 .superpowers/
 
+# Git worktrees (local isolated checkouts)
+.worktrees/
+
 # IntelliJ / Android Studio
 *.iml
 .idea/
