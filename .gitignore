@@ -12,6 +12,9 @@ out/
 # Local machine configuration
 local.properties
 
+# Brainstorm visual companion sessions
+.superpowers/
+
 # IntelliJ / Android Studio
 *.iml
 .idea/
