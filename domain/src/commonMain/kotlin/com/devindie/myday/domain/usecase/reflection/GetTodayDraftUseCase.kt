@@ -1,6 +1,7 @@
 package com.devindie.myday.domain.usecase.reflection
 
 import com.devindie.myday.domain.model.reflection.IsoDate
+import com.devindie.myday.domain.model.reflection.TodayDraft
 import com.devindie.myday.domain.repository.DailyNoteRepository
 import com.devindie.myday.domain.repository.DraftRepository
 

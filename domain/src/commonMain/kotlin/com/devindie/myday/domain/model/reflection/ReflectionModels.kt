@@ -62,3 +62,30 @@ sealed class ReflectionError : Exception() {
 
     data object OutsideWindow : ReflectionError()
 }
+
+data class TodayDraft(val draft: Draft?, val sourceChanged: Boolean)
+
+sealed class AutoDraftResult {
+    data object SkippedFeatureDisabled : AutoDraftResult()
+
+    data object SkippedOutsideWindow : AutoDraftResult()
+
+    data object SkippedDraftExists : AutoDraftResult()
+
+    data class Generated(val draft: Draft) : AutoDraftResult()
+}
+
+enum class NotHelpfulReason {
+    TooGeneric,
+    IncorrectInterpretation,
+    MissedImportantDetails,
+    TooLong,
+    TooPersonal,
+    Repetitive,
+    ToneDoesNotFeelRight,
+    UnexpectedContent,
+}
+
+data class ReflectionFeedbackEvent(val helpful: Boolean, val reason: String?)
+
+data class ReflectionSetupState(val prefs: ReflectionPrefs, val hasOpenRouterKey: Boolean, val vaultLinked: Boolean)

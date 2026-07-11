@@ -1,6 +1,8 @@
 package com.devindie.myday.domain.usecase.reflection
 
+import com.devindie.myday.domain.model.reflection.AutoDraftResult
 import com.devindie.myday.domain.model.reflection.IsoDate
+import com.devindie.myday.domain.reflection.isWithinWindow
 import com.devindie.myday.domain.repository.DraftRepository
 import com.devindie.myday.domain.repository.ReflectionPrefsRepository
 

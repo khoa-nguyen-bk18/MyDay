@@ -5,6 +5,7 @@ import com.devindie.myday.domain.fake.FakeDailyNoteRepository
 import com.devindie.myday.domain.fake.FakeDraftRepository
 import com.devindie.myday.domain.fake.FakeReflectionPrefsRepository
 import com.devindie.myday.domain.fake.FakeReflectionRepository
+import com.devindie.myday.domain.model.reflection.AutoDraftResult
 import com.devindie.myday.domain.model.reflection.DailyNoteContent
 import com.devindie.myday.domain.model.reflection.DailyNoteRef
 import com.devindie.myday.domain.model.reflection.DailyNoteResolution
