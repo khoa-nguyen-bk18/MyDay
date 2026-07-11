@@ -7,6 +7,7 @@ import com.devindie.myday.data.coroutines.DispatcherProvider
 import com.devindie.myday.data.local.browse.getBrowseDatabaseBuilder
 import com.devindie.myday.data.onboarding.OnboardingRepositoryImpl
 import com.devindie.myday.data.onboarding.createOnboardingDataStore
+import com.devindie.myday.data.reflection.AndroidReflectionScheduler
 import com.devindie.myday.data.reflection.createDraftDataStore
 import com.devindie.myday.data.reflection.createReflectionPrefsDataStore
 import com.devindie.myday.data.reflection.createVaultLinkDataStore
@@ -24,6 +25,7 @@ import com.devindie.myday.domain.reflection.ReflectionInjection
 import com.devindie.myday.domain.repository.AppStartupRepository
 import com.devindie.myday.domain.repository.CardDetailRepository
 import com.devindie.myday.domain.repository.OnboardingRepository
+import com.devindie.myday.domain.repository.ReflectionSchedulerPort
 import com.devindie.myday.domain.repository.SettingsRepository
 import com.devindie.myday.domain.repository.UserRepository
 import eu.anifantakis.lib.ksafe.KSafe
@@ -74,4 +76,5 @@ actual fun platformDataModule(): Module = module {
     single(named(ReflectionInjection.VAULT_LINK_DATASTORE)) { createVaultLinkDataStore(get<Context>()) }
     single(named(ReflectionInjection.DRAFT_DATASTORE)) { createDraftDataStore(get<Context>()) }
     includes(reflectionDataModule())
+    single<ReflectionSchedulerPort> { AndroidReflectionScheduler(context = get()) }
 }

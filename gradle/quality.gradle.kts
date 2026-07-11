@@ -8,8 +8,7 @@ fun appProject(): String = ":${appModulePath()}"
 private val detektModuleDirs =
     setOf("domain", "data", "storage", "analytics", "billing", "architecture")
 
-fun isKotlinSource(path: String): Boolean =
-    path.endsWith(".kt") || path.endsWith(".kts")
+fun isKotlinSource(path: String): Boolean = path.endsWith(".kt") || path.endsWith(".kts")
 
 fun hookFileOrThrow(): File {
     val path =
@@ -22,28 +21,34 @@ fun hookFileOrThrow(): File {
     return file
 }
 
-fun execAndCapture(command: List<String>, workingDir: File = rootProject.projectDir): Pair<Int, String> {
+fun execAndCapture(
+    command: List<String>,
+    workingDir: File = rootProject.projectDir,
+): Pair<Int, String> {
     val process =
         ProcessBuilder(command)
             .directory(workingDir)
             .redirectErrorStream(true)
             .start()
-    val output = process.inputStream.bufferedReader().readText().trim()
+    val output =
+        process.inputStream
+            .bufferedReader()
+            .readText()
+            .trim()
     val exitCode = process.waitFor()
     return exitCode to output
 }
 
-fun filterOutputForFile(output: String, relativePath: String, fileName: String): List<String> =
+fun filterOutputForFile(
+    output: String,
+    relativePath: String,
+    fileName: String,
+): List<String> =
     output
         .lineSequence()
         .filter { line ->
-            line.contains(relativePath) ||
-                line.contains(fileName) ||
-                line.contains("BUILD FAILED") ||
-                line.startsWith("> ") ||
-                line.contains("weighted issues")
-        }
-        .distinct()
+            line.contains(relativePath) || line.contains("/$fileName") || line.endsWith(fileName)
+        }.distinct()
         .toList()
 
 fun detektProjectForPath(relativePath: String): String? {

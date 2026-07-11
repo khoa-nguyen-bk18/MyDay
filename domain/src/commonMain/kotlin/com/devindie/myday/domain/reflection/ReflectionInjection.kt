@@ -7,4 +7,5 @@ object ReflectionInjection {
     const val CLOCK = "reflectionClock"
     const val TODAY_ISO = "reflectionTodayIso"
     const val MINUTE_OF_DAY = "reflectionMinuteOfDay"
+    const val DEBUG_TOOLS = "reflectionDebugTools"
 }

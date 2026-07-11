@@ -13,8 +13,19 @@ class SaveReflectionUseCase(
     private val reflections: ReflectionRepository,
     private val todayIso: () -> IsoDate,
 ) {
-    suspend operator fun invoke(replaceExisting: Boolean): Result<ReflectionDocument> = runCatching {
-        val draft = drafts.get(todayIso()) ?: throw ReflectionError.DraftMissing
+    suspend operator fun invoke(
+        replaceExisting: Boolean,
+        markdownOverride: String? = null,
+    ): Result<ReflectionDocument> = runCatching {
+        val date = todayIso()
+        val existing = drafts.get(date) ?: throw ReflectionError.DraftMissing
+        val markdown = markdownOverride?.takeIf { it.isNotBlank() } ?: existing.markdown
+        val draft =
+            if (markdown != existing.markdown) {
+                existing.copy(markdown = markdown).also { drafts.save(it) }
+            } else {
+                existing
+            }
         val p = prefs.get()
         val exists =
             reflections.reflectionFileExists(draft.date, p.reflectionFolder).getOrThrow()

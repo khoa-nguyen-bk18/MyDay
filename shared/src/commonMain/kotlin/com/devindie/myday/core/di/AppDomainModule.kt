@@ -6,7 +6,9 @@ import com.devindie.myday.domain.usecase.carddetail.GetCardDetailUseCase
 import com.devindie.myday.domain.usecase.onboarding.CompleteOnboardingUseCase
 import com.devindie.myday.domain.usecase.onboarding.HasCompletedOnboardingUseCase
 import com.devindie.myday.domain.usecase.reflection.ClearOpenRouterKeyUseCase
+import com.devindie.myday.domain.usecase.reflection.EnsureReflectionScheduleUseCase
 import com.devindie.myday.domain.usecase.reflection.GenerateReflectionDraftUseCase
+import com.devindie.myday.domain.usecase.reflection.GetReflectionSetupUseCase
 import com.devindie.myday.domain.usecase.reflection.GetTodayDraftUseCase
 import com.devindie.myday.domain.usecase.reflection.LinkVaultUseCase
 import com.devindie.myday.domain.usecase.reflection.ObserveReflectionSetupUseCase
@@ -54,7 +56,9 @@ val appDomainModule =
         factoryOf(::SetOpenRouterKeyUseCase)
         factoryOf(::ClearOpenRouterKeyUseCase)
         factoryOf(::ObserveReflectionSetupUseCase)
+        factoryOf(::GetReflectionSetupUseCase)
         factoryOf(::UpdateReflectionPrefsUseCase)
+        factoryOf(::EnsureReflectionScheduleUseCase)
         factoryOf(::SubmitReflectionFeedbackUseCase)
         factory {
             GenerateReflectionDraftUseCase(

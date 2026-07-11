@@ -8,13 +8,18 @@ import com.devindie.myday.domain.repository.DailyNoteRepository
 import com.devindie.myday.domain.repository.DraftRepository
 import com.devindie.myday.domain.repository.ReflectionPrefsRepository
 import com.devindie.myday.domain.repository.ReflectionRepository
-import com.devindie.myday.domain.repository.ReflectionSchedulerPort
+import com.devindie.myday.domain.repository.VaultPickerPort
 import com.devindie.myday.storage.api.StorageClient
 import io.ktor.client.HttpClient
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
+/**
+ * Common reflection data bindings.
+ * [com.devindie.myday.domain.repository.ReflectionSchedulerPort] is bound in
+ * platform [com.devindie.myday.data.di.platformDataModule] actuals (WorkManager / iOS).
+ */
 fun reflectionDataModule(): Module = module {
     single(named(ReflectionInjection.CLOCK)) { { reflectionEpochMillis() } }
     single(named(ReflectionInjection.TODAY_ISO)) { { reflectionTodayIso() } }
@@ -69,5 +74,5 @@ fun reflectionDataModule(): Module = module {
             dispatchers = get(),
         )
     }
-    single<ReflectionSchedulerPort> { NoOpReflectionScheduler() }
+    single<VaultPickerPort> { StorageVaultPicker(storageClient = get()) }
 }

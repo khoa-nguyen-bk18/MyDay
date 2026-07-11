@@ -6,6 +6,7 @@ import com.devindie.myday.data.coroutines.IosDispatcherProvider
 import com.devindie.myday.data.local.browse.getBrowseDatabaseBuilder
 import com.devindie.myday.data.onboarding.OnboardingRepositoryImpl
 import com.devindie.myday.data.onboarding.createOnboardingDataStore
+import com.devindie.myday.data.reflection.IosReflectionScheduler
 import com.devindie.myday.data.reflection.createDraftDataStore
 import com.devindie.myday.data.reflection.createReflectionPrefsDataStore
 import com.devindie.myday.data.reflection.createVaultLinkDataStore
@@ -23,8 +24,10 @@ import com.devindie.myday.domain.reflection.ReflectionInjection
 import com.devindie.myday.domain.repository.AppStartupRepository
 import com.devindie.myday.domain.repository.CardDetailRepository
 import com.devindie.myday.domain.repository.OnboardingRepository
+import com.devindie.myday.domain.repository.ReflectionSchedulerPort
 import com.devindie.myday.domain.repository.SettingsRepository
 import com.devindie.myday.domain.repository.UserRepository
+import com.devindie.myday.domain.usecase.reflection.RunAutoDraftUseCase
 import eu.anifantakis.lib.ksafe.KSafe
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
@@ -71,4 +74,7 @@ actual fun platformDataModule(): Module = module {
     single(named(ReflectionInjection.VAULT_LINK_DATASTORE)) { createVaultLinkDataStore() }
     single(named(ReflectionInjection.DRAFT_DATASTORE)) { createDraftDataStore() }
     includes(reflectionDataModule())
+    single<ReflectionSchedulerPort> {
+        IosReflectionScheduler(runAutoDraft = { get<RunAutoDraftUseCase>() })
+    }
 }

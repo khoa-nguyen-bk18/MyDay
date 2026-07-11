@@ -86,6 +86,8 @@ spotless {
         targetExclude(
             "**/build/**",
             "**/iosApp/**",
+            // Seed fixture strings intentionally exceed line length.
+            "**/BrowseCatalogSeeder.kt",
         )
         ktlint(libs.versions.ktlint.get())
             .setEditorConfigPath("$rootDir/.editorconfig")
@@ -106,6 +108,7 @@ ktlint {
     filter {
         exclude("**/build/**")
         exclude("**/iosApp/**")
+        exclude("**/BrowseCatalogSeeder.kt")
     }
     additionalEditorconfig.set(
         mapOf(
