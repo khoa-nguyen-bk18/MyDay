@@ -97,14 +97,12 @@ class LayerDependencyTest {
     }
 
     @Test
-    fun `data layer does not import storage`() {
-        Konsist.scopeFromPackage("com.devindie.myday.data..")
-            .files
-            .assertFalse { file ->
-                file.imports.any { import ->
-                    import.name.startsWith("com.devindie.myday.storage.")
-                }
+    fun `shared commonMain production does not import storage`() {
+        sharedCommonMainProductionFiles().assertFalse { file ->
+            file.imports.any { import ->
+                import.name.startsWith("com.devindie.myday.storage.")
             }
+        }
     }
 
     @Test
@@ -181,6 +179,14 @@ class LayerDependencyTest {
     private fun androidAppFiles() = Konsist.scopeFromPackage("com.devindie.myday..")
         .files
         .filter { it.path.contains("androidApp") }
+
+    private fun sharedCommonMainProductionFiles() = Konsist.scopeFromProduction()
+        .files
+        .filter { file ->
+            file.path.contains("shared") &&
+                file.path.contains("commonMain") &&
+                file.packagee?.name?.startsWith("com.devindie.myday.storage") != true
+        }
 
     private fun screenViewModels() = Konsist.scopeFromPackage("com.devindie.myday.feature..impl..")
         .classes()
