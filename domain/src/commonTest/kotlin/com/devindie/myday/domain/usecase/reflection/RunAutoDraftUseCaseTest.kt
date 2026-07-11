@@ -17,6 +17,21 @@ import kotlin.test.assertIs
 
 class RunAutoDraftUseCaseTest {
     @Test
+    fun featureDisabled_returnsSkippedFeatureDisabled() = runTest {
+        val uc =
+            createUseCase(
+                prefs =
+                FakeReflectionPrefsRepository(
+                    ReflectionPrefs(consentAccepted = true, featureEnabled = false),
+                ),
+            )
+
+        val result = uc()
+
+        assertIs<AutoDraftResult.SkippedFeatureDisabled>(result)
+    }
+
+    @Test
     fun outsideWindow_returnsSkippedOutsideWindow() = runTest {
         val uc =
             createUseCase(

@@ -64,6 +64,19 @@ class GenerateReflectionDraftUseCaseTest {
     }
 
     @Test
+    fun vaultNotLinked_returnsVaultNotLinked() = runTest {
+        val uc =
+            createUseCase(
+                notes = FakeDailyNoteRepository(vaultLink = null),
+            )
+
+        val result = uc()
+
+        assertTrue(result.isFailure)
+        assertIs<ReflectionError.VaultNotLinked>(result.exceptionOrNull())
+    }
+
+    @Test
     fun missingNote_returnsDailyNoteMissing() = runTest {
         val uc =
             createUseCase(

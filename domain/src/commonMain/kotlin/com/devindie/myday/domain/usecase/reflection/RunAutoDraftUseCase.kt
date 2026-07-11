@@ -14,6 +14,7 @@ class RunAutoDraftUseCase(
     suspend operator fun invoke(): AutoDraftResult {
         val p = prefs.get()
         return when {
+            !p.featureEnabled -> AutoDraftResult.SkippedFeatureDisabled
             !isWithinWindow(minuteOfDay(), p.windowStartMinuteOfDay, p.windowEndMinuteOfDay) ->
                 AutoDraftResult.SkippedOutsideWindow
             drafts.get(todayIso()) != null -> AutoDraftResult.SkippedDraftExists
