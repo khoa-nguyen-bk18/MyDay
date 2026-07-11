@@ -46,6 +46,8 @@ sealed class ReflectionError : Exception() {
 
     data object DailyNoteMissing : ReflectionError()
 
+    data object DraftMissing : ReflectionError()
+
     data object InsufficientContent : ReflectionError()
 
     data object AlreadyExists : ReflectionError()

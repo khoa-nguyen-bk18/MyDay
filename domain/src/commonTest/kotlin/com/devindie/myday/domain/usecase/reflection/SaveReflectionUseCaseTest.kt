@@ -13,6 +13,22 @@ import kotlin.test.assertTrue
 
 class SaveReflectionUseCaseTest {
     @Test
+    fun noDraft_returnsDraftMissing() = runTest {
+        val uc =
+            SaveReflectionUseCase(
+                drafts = FakeDraftRepository(),
+                prefs = FakeReflectionPrefsRepository(ReflectionPrefs()),
+                reflections = FakeReflectionRepository(),
+                todayIso = { "2026-07-11" },
+            )
+
+        val result = uc(replaceExisting = false)
+
+        assertTrue(result.isFailure)
+        assertIs<ReflectionError.DraftMissing>(result.exceptionOrNull())
+    }
+
+    @Test
     fun replaceFalse_whenFileExists_returnsAlreadyExists() = runTest {
         val drafts = FakeDraftRepository()
         drafts.save(

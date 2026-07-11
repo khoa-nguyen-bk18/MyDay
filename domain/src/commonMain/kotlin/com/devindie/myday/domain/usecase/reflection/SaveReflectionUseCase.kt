@@ -14,7 +14,7 @@ class SaveReflectionUseCase(
     private val todayIso: () -> IsoDate,
 ) {
     suspend operator fun invoke(replaceExisting: Boolean): Result<ReflectionDocument> = runCatching {
-        val draft = drafts.get(todayIso()) ?: throw ReflectionError.DailyNoteMissing
+        val draft = drafts.get(todayIso()) ?: throw ReflectionError.DraftMissing
         val p = prefs.get()
         val exists =
             reflections.reflectionFileExists(draft.date, p.reflectionFolder).getOrThrow()

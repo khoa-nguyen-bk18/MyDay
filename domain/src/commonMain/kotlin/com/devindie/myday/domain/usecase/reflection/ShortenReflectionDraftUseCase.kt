@@ -17,7 +17,7 @@ class ShortenReflectionDraftUseCase(
     private val todayIso: () -> IsoDate,
 ) {
     suspend operator fun invoke(): Result<Draft> = runCatching {
-        val draft = drafts.get(todayIso()) ?: throw ReflectionError.DailyNoteMissing
+        val draft = drafts.get(todayIso()) ?: throw ReflectionError.DraftMissing
         val key = keys.getOpenRouterKey() ?: throw ReflectionError.KeyMissing
         val p = prefs.get()
         val model =
