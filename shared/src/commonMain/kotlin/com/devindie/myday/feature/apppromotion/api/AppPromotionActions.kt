@@ -21,9 +21,7 @@ class AppPromotionActions internal constructor(
 }
 
 @Composable
-fun rememberAppPromotionActions(
-    client: AppPromotionClient = koinInject(),
-): AppPromotionActions {
+fun rememberAppPromotionActions(client: AppPromotionClient = koinInject()): AppPromotionActions {
     val scope = rememberCoroutineScope()
     return remember(client, scope) { AppPromotionActions(client, scope) }
 }

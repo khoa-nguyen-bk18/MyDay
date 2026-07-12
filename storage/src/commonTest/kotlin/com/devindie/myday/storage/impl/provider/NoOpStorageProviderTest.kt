@@ -13,37 +13,32 @@ class NoOpStorageProviderTest {
     private val token = StorageLocationToken("token")
 
     @Test
-    fun list_returnsNotConfigured() =
-        runTest {
-            val result = provider.list(token, "") as StorageResult.Failure
-            assertTrue(result.error is StorageError.NotConfigured)
-        }
+    fun list_returnsNotConfigured() = runTest {
+        val result = provider.list(token, "") as StorageResult.Failure
+        assertTrue(result.error is StorageError.NotConfigured)
+    }
 
     @Test
-    fun exists_returnsNotConfigured() =
-        runTest {
-            val result = provider.exists(token, "file.txt") as StorageResult.Failure
-            assertTrue(result.error is StorageError.NotConfigured)
-        }
+    fun exists_returnsNotConfigured() = runTest {
+        val result = provider.exists(token, "file.txt") as StorageResult.Failure
+        assertTrue(result.error is StorageError.NotConfigured)
+    }
 
     @Test
-    fun readBytes_returnsNotConfigured() =
-        runTest {
-            val result = provider.readBytes(token, "file.txt") as StorageResult.Failure
-            assertTrue(result.error is StorageError.NotConfigured)
-        }
+    fun readBytes_returnsNotConfigured() = runTest {
+        val result = provider.readBytes(token, "file.txt") as StorageResult.Failure
+        assertTrue(result.error is StorageError.NotConfigured)
+    }
 
     @Test
-    fun writeBytes_returnsNotConfigured() =
-        runTest {
-            val result = provider.writeBytes(token, "file.txt", byteArrayOf()) as StorageResult.Failure
-            assertTrue(result.error is StorageError.NotConfigured)
-        }
+    fun writeBytes_returnsNotConfigured() = runTest {
+        val result = provider.writeBytes(token, "file.txt", byteArrayOf()) as StorageResult.Failure
+        assertTrue(result.error is StorageError.NotConfigured)
+    }
 
     @Test
-    fun delete_returnsNotConfigured() =
-        runTest {
-            val result = provider.delete(token, "file.txt") as StorageResult.Failure
-            assertEquals(StorageError.NotConfigured, result.error)
-        }
+    fun delete_returnsNotConfigured() = runTest {
+        val result = provider.delete(token, "file.txt") as StorageResult.Failure
+        assertEquals(StorageError.NotConfigured, result.error)
+    }
 }

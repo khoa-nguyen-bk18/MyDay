@@ -2,7 +2,6 @@ package com.devindie.myday.storage
 
 import android.net.Uri
 import com.devindie.myday.storage.api.StorageAccessMode
-import kotlinx.coroutines.CompletableDeferred
 
 internal object DocumentTreePickerRegistry {
     private var pickTree: (suspend () -> Uri?)? = null

@@ -13,10 +13,7 @@ import com.devindie.myday.domain.model.settings.SingleChoiceSettingsItemModel
 import com.devindie.myday.domain.model.settings.TextSettingsItemModel
 
 @Composable
-internal fun SettingsItemRow(
-    item: SettingsItemModel,
-    onValueChange: (SettingKey, SettingValue) -> Unit,
-) {
+internal fun SettingsItemRow(item: SettingsItemModel, onValueChange: (SettingKey, SettingValue) -> Unit) {
     when (item) {
         is BooleanSettingsItemModel ->
             BooleanSettingRow(

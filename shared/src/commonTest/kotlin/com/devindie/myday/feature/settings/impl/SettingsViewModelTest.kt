@@ -1,12 +1,12 @@
 package com.devindie.myday.feature.settings.impl
 
-import com.devindie.myday.fake.FakeSettingsCatalog
-import com.devindie.myday.fake.FakeSettingsRepository
 import com.devindie.myday.domain.model.settings.BooleanSettingsItemModel
 import com.devindie.myday.domain.model.settings.SettingKey
 import com.devindie.myday.domain.model.settings.SettingValue
 import com.devindie.myday.domain.usecase.settings.ObserveSettingsScreenUseCase
 import com.devindie.myday.domain.usecase.settings.UpdateSettingUseCase
+import com.devindie.myday.fake.FakeSettingsCatalog
+import com.devindie.myday.fake.FakeSettingsRepository
 import com.devindie.myday.test.advanceMainUntilIdle
 import com.devindie.myday.test.runViewModelTest
 import kotlin.test.Test

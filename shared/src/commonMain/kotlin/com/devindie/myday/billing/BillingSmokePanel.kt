@@ -22,10 +22,7 @@ import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
 @Composable
-fun BillingSmokePanel(
-    modifier: Modifier = Modifier,
-    billing: BillingClient = koinInject(),
-) {
+fun BillingSmokePanel(modifier: Modifier = Modifier, billing: BillingClient = koinInject()) {
     var status by remember { mutableStateOf("Tap a button to run a billing smoke check.") }
     val scope = rememberCoroutineScope()
 
@@ -91,10 +88,9 @@ fun BillingSmokePanel(
     }
 }
 
-private fun BillingError.format(): String =
-    when (this) {
-        BillingError.NotConfigured -> "not configured (billing disabled or Purchases not configured)"
-        BillingError.UserCancelled -> "user cancelled"
-        is BillingError.StoreError -> "store error: $message"
-        is BillingError.Unknown -> "unknown: $message"
-    }
+private fun BillingError.format(): String = when (this) {
+    BillingError.NotConfigured -> "not configured (billing disabled or Purchases not configured)"
+    BillingError.UserCancelled -> "user cancelled"
+    is BillingError.StoreError -> "store error: $message"
+    is BillingError.Unknown -> "unknown: $message"
+}

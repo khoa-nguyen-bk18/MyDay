@@ -7,16 +7,13 @@ import platform.StoreKit.SKStoreReviewController
 import platform.UIKit.UIActivityViewController
 import platform.UIKit.UIApplication
 
-internal class IosAppPromotionPlatform(
-    private val config: AppPromotionConfig,
-) : AppPromotionPlatform {
-    override suspend fun requestInAppReview(): AppPromotionResult =
-        runCatching {
-            SKStoreReviewController.requestReview()
-            AppPromotionResult.Success
-        }.getOrElse {
-            AppPromotionResult.Failure(AppPromotionError.Unknown)
-        }
+internal class IosAppPromotionPlatform(private val config: AppPromotionConfig) : AppPromotionPlatform {
+    override suspend fun requestInAppReview(): AppPromotionResult = runCatching {
+        SKStoreReviewController.requestReview()
+        AppPromotionResult.Success
+    }.getOrElse {
+        AppPromotionResult.Failure(AppPromotionError.Unknown)
+    }
 
     override suspend fun shareApp(): AppPromotionResult {
         val rootViewController =

@@ -99,7 +99,7 @@ fun MainTabNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = MainRoute.Browse,
+        startDestination = MainRoute.Reflect,
         modifier = modifier.fillMaxSize().padding(innerPadding).consumeWindowInsets(innerPadding),
     ) {
         mainTabNavGraph(

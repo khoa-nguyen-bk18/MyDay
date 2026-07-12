@@ -31,12 +31,7 @@ import com.devindie.myday.feature.legal.impl.platform.rememberOpenUrlExternally
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun LegalDocumentContent(
-    url: String,
-    title: String,
-    onBack: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
+internal fun LegalDocumentContent(url: String, title: String, onBack: () -> Unit, modifier: Modifier = Modifier) {
     var state by remember { mutableStateOf(LegalDocumentScreenUiState()) }
     val openUrlExternally = rememberOpenUrlExternally()
 

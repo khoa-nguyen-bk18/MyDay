@@ -10,9 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class SettingsRepositoryImpl(
-    private val dataStore: DataStore<Preferences>,
-) : SettingsRepository {
+class SettingsRepositoryImpl(private val dataStore: DataStore<Preferences>) : SettingsRepository {
     override fun observeValue(key: SettingKey, kind: SettingValue): Flow<SettingValue?> =
         dataStore.data.map { preferences -> readValue(preferences, key, kind) }
 

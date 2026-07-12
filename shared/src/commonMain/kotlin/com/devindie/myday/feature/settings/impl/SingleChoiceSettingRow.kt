@@ -30,17 +30,17 @@ internal fun SingleChoiceSettingRow(
 
     ListItem(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .clickable { showDialog = true },
+        modifier
+            .fillMaxWidth()
+            .clickable { showDialog = true },
         headlineContent = { Text(item.title) },
         supportingContent = {
             Text(
                 text =
-                    buildString {
-                        item.description?.let { append("$it\n") }
-                        append(selectedLabel)
-                    },
+                buildString {
+                    item.description?.let { append("$it\n") }
+                    append(selectedLabel)
+                },
             )
         },
     )
@@ -54,12 +54,12 @@ internal fun SingleChoiceSettingRow(
                     items(item.options, key = { it.id }) { option ->
                         ListItem(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        onOptionSelected(option.id)
-                                        showDialog = false
-                                    },
+                            Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    onOptionSelected(option.id)
+                                    showDialog = false
+                                },
                             headlineContent = { Text(option.label) },
                             leadingContent = {
                                 RadioButton(

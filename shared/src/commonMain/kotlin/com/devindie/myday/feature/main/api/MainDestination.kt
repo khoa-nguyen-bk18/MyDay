@@ -46,6 +46,6 @@ enum class MainDestination(
     ;
 
     companion object {
-        val Start = Browse
+        val Start = Reflect
     }
 }

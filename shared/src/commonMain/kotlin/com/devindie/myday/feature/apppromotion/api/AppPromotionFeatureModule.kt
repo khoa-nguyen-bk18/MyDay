@@ -6,15 +6,14 @@ import com.devindie.myday.feature.apppromotion.impl.platform.appPromotionPlatfor
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-fun appPromotionFeatureModule(config: AppPromotionConfig): Module =
-    module {
-        single { config }
-        includes(appPromotionPlatformModule())
-        single<AppPromotionClient> {
-            if (config.enabled) {
-                AppPromotionClientImpl(platform = get())
-            } else {
-                NoOpAppPromotionClient()
-            }
+fun appPromotionFeatureModule(config: AppPromotionConfig): Module = module {
+    single { config }
+    includes(appPromotionPlatformModule())
+    single<AppPromotionClient> {
+        if (config.enabled) {
+            AppPromotionClientImpl(platform = get())
+        } else {
+            NoOpAppPromotionClient()
         }
     }
+}

@@ -10,13 +10,8 @@ import com.devindie.myday.storage.api.provider.StorageProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-internal class AndroidSafStorageProvider(
-    private val context: Context,
-) : StorageProvider {
-    override suspend fun list(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<List<StorageEntry>> =
+internal class AndroidSafStorageProvider(private val context: Context) : StorageProvider {
+    override suspend fun list(token: StorageLocationToken, relativePath: String): StorageResult<List<StorageEntry>> =
         withIo {
             val directory =
                 resolveDirectory(token, relativePath)
@@ -28,11 +23,11 @@ internal class AndroidSafStorageProvider(
                     StorageEntry(
                         name = name,
                         relativePath =
-                            if (relativePath.isEmpty()) {
-                                name
-                            } else {
-                                "$relativePath/$name"
-                            },
+                        if (relativePath.isEmpty()) {
+                            name
+                        } else {
+                            "$relativePath/$name"
+                        },
                         isDirectory = child.isDirectory,
                         sizeBytes = if (child.isDirectory) null else child.length(),
                         lastModifiedEpochMillis = child.lastModified(),
@@ -41,18 +36,11 @@ internal class AndroidSafStorageProvider(
             )
         }
 
-    override suspend fun exists(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<Boolean> =
-        withIo {
-            StorageResult.Success(resolveDocument(token, relativePath) != null)
-        }
+    override suspend fun exists(token: StorageLocationToken, relativePath: String): StorageResult<Boolean> = withIo {
+        StorageResult.Success(resolveDocument(token, relativePath) != null)
+    }
 
-    override suspend fun readBytes(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<ByteArray> =
+    override suspend fun readBytes(token: StorageLocationToken, relativePath: String): StorageResult<ByteArray> =
         withIo {
             val document =
                 resolveDocument(token, relativePath)
@@ -71,53 +59,58 @@ internal class AndroidSafStorageProvider(
         token: StorageLocationToken,
         relativePath: String,
         bytes: ByteArray,
-    ): StorageResult<Unit> =
-        withIo {
-            val (parentPath, fileName) = splitRelativePath(relativePath)
-            val parent =
-                resolveDirectory(token, parentPath)
-                    ?: return@withIo StorageResult.Failure(StorageError.NotFound)
-            if (!parent.canWrite()) {
-                return@withIo StorageResult.Failure(StorageError.PermissionDenied)
-            }
-            val document =
-                parent.findFile(fileName)
-                    ?: parent.createFile(MIME_TYPE_OCTET_STREAM, fileName)
-                    ?: return@withIo StorageResult.Failure(
-                        StorageError.Io(message = "unable_to_create_file"),
-                    )
-            context.contentResolver.openOutputStream(document.uri, WRITE_MODE_TRUNCATE)?.use { output ->
-                output.write(bytes)
-            } ?: return@withIo StorageResult.Failure(StorageError.PermissionDenied)
-            StorageResult.Success(Unit)
+    ): StorageResult<Unit> = withIo {
+        val (parentPath, fileName) = splitRelativePath(relativePath)
+        val parent =
+            ensureDirectory(token, parentPath)
+                ?: return@withIo StorageResult.Failure(StorageError.NotFound)
+        if (!parent.canWrite()) {
+            return@withIo StorageResult.Failure(StorageError.PermissionDenied)
         }
+        val document =
+            parent.findFile(fileName)
+                ?: parent.createFile(MIME_TYPE_OCTET_STREAM, fileName)
+                ?: return@withIo StorageResult.Failure(
+                    StorageError.Io(message = "unable_to_create_file"),
+                )
+        context.contentResolver.openOutputStream(document.uri, WRITE_MODE_TRUNCATE)?.use { output ->
+            output.write(bytes)
+        } ?: return@withIo StorageResult.Failure(StorageError.PermissionDenied)
+        StorageResult.Success(Unit)
+    }
 
-    override suspend fun delete(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<Unit> =
-        withIo {
-            val document =
-                resolveDocument(token, relativePath)
-                    ?: return@withIo StorageResult.Failure(StorageError.NotFound)
-            if (!document.delete()) {
-                return@withIo StorageResult.Failure(StorageError.PermissionDenied)
+    private fun ensureDirectory(token: StorageLocationToken, relativePath: String): DocumentFile? {
+        val treeUri = SafUriCodec.parseTreeUri(token) ?: return null
+        var current = DocumentFile.fromTreeUri(context, treeUri) ?: return null
+        if (relativePath.isEmpty()) return current
+        for (segment in relativePath.split('/')) {
+            if (segment.isEmpty()) return null
+            val existing = current.findFile(segment)
+            current = when {
+                existing == null -> current.createDirectory(segment) ?: return null
+                existing.isDirectory -> existing
+                else -> return null // a file blocks the path
             }
-            StorageResult.Success(Unit)
         }
+        return current
+    }
 
-    private fun resolveDirectory(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): DocumentFile? {
+    override suspend fun delete(token: StorageLocationToken, relativePath: String): StorageResult<Unit> = withIo {
+        val document =
+            resolveDocument(token, relativePath)
+                ?: return@withIo StorageResult.Failure(StorageError.NotFound)
+        if (!document.delete()) {
+            return@withIo StorageResult.Failure(StorageError.PermissionDenied)
+        }
+        StorageResult.Success(Unit)
+    }
+
+    private fun resolveDirectory(token: StorageLocationToken, relativePath: String): DocumentFile? {
         val document = resolveDocument(token, relativePath) ?: return null
         return document.takeIf { it.isDirectory }
     }
 
-    private fun resolveDocument(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): DocumentFile? {
+    private fun resolveDocument(token: StorageLocationToken, relativePath: String): DocumentFile? {
         val treeUri = SafUriCodec.parseTreeUri(token) ?: return null
         var current = DocumentFile.fromTreeUri(context, treeUri) ?: return null
         if (relativePath.isEmpty()) {
@@ -132,10 +125,9 @@ internal class AndroidSafStorageProvider(
         return current
     }
 
-    private suspend fun <T> withIo(block: () -> StorageResult<T>): StorageResult<T> =
-        withContext(Dispatchers.IO) {
-            block()
-        }
+    private suspend fun <T> withIo(block: () -> StorageResult<T>): StorageResult<T> = withContext(Dispatchers.IO) {
+        block()
+    }
 
     private companion object {
         const val MIME_TYPE_OCTET_STREAM = "application/octet-stream"

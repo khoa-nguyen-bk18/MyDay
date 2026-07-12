@@ -21,11 +21,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.devindie.myday.feature.apppromotion.api.AppPromotionSettingsSection
 import com.devindie.myday.domain.model.settings.SettingKey
 import com.devindie.myday.domain.model.settings.SettingValue
-import com.devindie.myday.domain.model.settings.SettingsItemModel
 import com.devindie.myday.domain.model.settings.SettingsSectionModel
+import com.devindie.myday.feature.apppromotion.api.AppPromotionSettingsSection
 import kotlinx.coroutines.flow.Flow
 
 @OptIn(ExperimentalMaterial3Api::class)

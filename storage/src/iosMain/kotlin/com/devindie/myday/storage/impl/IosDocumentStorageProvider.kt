@@ -22,17 +22,13 @@ import platform.Foundation.NSFileTypeDirectory
 import platform.Foundation.NSNumber
 import platform.Foundation.NSURL
 import platform.Foundation.NSURLIsDirectoryKey
-import platform.Foundation.create
 import platform.Foundation.dataWithContentsOfURL
 import platform.Foundation.timeIntervalSince1970
 import platform.posix.memcpy
 
 @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
 internal class IosDocumentStorageProvider : StorageProvider {
-    override suspend fun list(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<List<StorageEntry>> =
+    override suspend fun list(token: StorageLocationToken, relativePath: String): StorageResult<List<StorageEntry>> =
         withIo(token) { rootUrl ->
             val directoryUrl =
                 resolveChildUrl(rootUrl, relativePath)
@@ -61,11 +57,11 @@ internal class IosDocumentStorageProvider : StorageProvider {
                     StorageEntry(
                         name = name,
                         relativePath =
-                            if (relativePath.isEmpty()) {
-                                name
-                            } else {
-                                "$relativePath/$name"
-                            },
+                        if (relativePath.isEmpty()) {
+                            name
+                        } else {
+                            "$relativePath/$name"
+                        },
                         isDirectory = isDirectory,
                         sizeBytes = attributes?.fileSize(),
                         lastModifiedEpochMillis = attributes?.lastModifiedEpochMillis(),
@@ -74,10 +70,7 @@ internal class IosDocumentStorageProvider : StorageProvider {
             )
         }
 
-    override suspend fun exists(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<Boolean> =
+    override suspend fun exists(token: StorageLocationToken, relativePath: String): StorageResult<Boolean> =
         withIo(token) { rootUrl ->
             val targetUrl = resolveChildUrl(rootUrl, relativePath) ?: return@withIo StorageResult.Success(false)
             val exists =
@@ -87,10 +80,7 @@ internal class IosDocumentStorageProvider : StorageProvider {
             StorageResult.Success(exists)
         }
 
-    override suspend fun readBytes(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<ByteArray> =
+    override suspend fun readBytes(token: StorageLocationToken, relativePath: String): StorageResult<ByteArray> =
         withIo(token) { rootUrl ->
             val fileUrl =
                 resolveChildUrl(rootUrl, relativePath)
@@ -108,40 +98,43 @@ internal class IosDocumentStorageProvider : StorageProvider {
         token: StorageLocationToken,
         relativePath: String,
         bytes: ByteArray,
-    ): StorageResult<Unit> =
-        withIo(token) { rootUrl ->
-            val (parentPath, fileName) = splitRelativePath(relativePath)
-            val parentUrl =
-                resolveChildUrl(rootUrl, parentPath)
-                    ?: return@withIo StorageResult.Failure(StorageError.NotFound)
-            if (!parentUrl.isDirectory()) {
-                return@withIo StorageResult.Failure(StorageError.NotFound)
-            }
-            val fileUrl =
-                parentUrl.URLByAppendingPathComponent(fileName, isDirectory = false)
-                    ?: return@withIo StorageResult.Failure(
-                        StorageError.Io(message = "unable_to_resolve_file_url"),
-                    )
-            val data = IosNSDataFactory.fromByteArray(bytes)
-            val path =
-                fileUrl.path
-                    ?: return@withIo StorageResult.Failure(StorageError.PermissionDenied)
-            val wrote =
-                NSFileManager.defaultManager.createFileAtPath(
-                    path = path,
-                    contents = data,
-                    attributes = null,
-                )
-            if (!wrote) {
-                return@withIo StorageResult.Failure(StorageError.PermissionDenied)
-            }
-            StorageResult.Success(Unit)
-        }
+    ): StorageResult<Unit> = withIo(token) { rootUrl ->
+        val (parentPath, fileName) = splitRelativePath(relativePath)
+        val parentUrl =
+            resolveChildUrl(rootUrl, parentPath)
+                ?: return@withIo StorageResult.Failure(StorageError.NotFound)
 
-    override suspend fun delete(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<Unit> =
+        val created = NSFileManager.defaultManager.createDirectoryAtURL(
+            url = parentUrl,
+            withIntermediateDirectories = true,
+            attributes = null,
+            error = null,
+        )
+        if (!created && !parentUrl.isDirectory()) {
+            return@withIo StorageResult.Failure(StorageError.NotFound)
+        }
+        val fileUrl =
+            parentUrl.URLByAppendingPathComponent(fileName, isDirectory = false)
+                ?: return@withIo StorageResult.Failure(
+                    StorageError.Io(message = "unable_to_resolve_file_url"),
+                )
+        val data = IosNSDataFactory.fromByteArray(bytes)
+        val path =
+            fileUrl.path
+                ?: return@withIo StorageResult.Failure(StorageError.PermissionDenied)
+        val wrote =
+            NSFileManager.defaultManager.createFileAtPath(
+                path = path,
+                contents = data,
+                attributes = null,
+            )
+        if (!wrote) {
+            return@withIo StorageResult.Failure(StorageError.PermissionDenied)
+        }
+        StorageResult.Success(Unit)
+    }
+
+    override suspend fun delete(token: StorageLocationToken, relativePath: String): StorageResult<Unit> =
         withIo(token) { rootUrl ->
             val targetUrl =
                 resolveChildUrl(rootUrl, relativePath)
@@ -157,10 +150,7 @@ internal class IosDocumentStorageProvider : StorageProvider {
             StorageResult.Success(Unit)
         }
 
-    private suspend fun <T> withIo(
-        token: StorageLocationToken,
-        block: (NSURL) -> StorageResult<T>,
-    ): StorageResult<T> =
+    private suspend fun <T> withIo(token: StorageLocationToken, block: (NSURL) -> StorageResult<T>): StorageResult<T> =
         withContext(Dispatchers.IO) {
             val rootUrl =
                 SecurityScopedBookmarkCodec.resolveUrl(token)
@@ -170,10 +160,7 @@ internal class IosDocumentStorageProvider : StorageProvider {
             }
         }
 
-    private inline fun <T> withScopedAccess(
-        url: NSURL,
-        block: () -> T,
-    ): T {
+    private inline fun <T> withScopedAccess(url: NSURL, block: () -> T): T {
         val started = url.startAccessingSecurityScopedResource()
         try {
             return block()
@@ -184,10 +171,7 @@ internal class IosDocumentStorageProvider : StorageProvider {
         }
     }
 
-    private fun resolveChildUrl(
-        rootUrl: NSURL,
-        relativePath: String,
-    ): NSURL? {
+    private fun resolveChildUrl(rootUrl: NSURL, relativePath: String): NSURL? {
         if (relativePath.isEmpty()) {
             return rootUrl
         }
@@ -214,8 +198,7 @@ internal class IosDocumentStorageProvider : StorageProvider {
         return attributes?.get(NSFileType) as? String == NSFileTypeDirectory
     }
 
-    private fun Map<Any?, *>.fileSize(): Long? =
-        (this[NSFileSize] as? NSNumber)?.longLongValue
+    private fun Map<Any?, *>.fileSize(): Long? = (this[NSFileSize] as? NSNumber)?.longLongValue
 
     private fun Map<Any?, *>.lastModifiedEpochMillis(): Long? {
         val date = this[NSFileModificationDate] as? NSDate ?: return null

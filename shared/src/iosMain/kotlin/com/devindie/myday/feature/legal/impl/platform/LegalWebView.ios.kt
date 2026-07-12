@@ -62,7 +62,8 @@ private class LegalWebNavigationDelegate(
     private val onPageStarted: () -> Unit,
     private val onPageFinished: () -> Unit,
     private val onError: () -> Unit,
-) : NSObject(), WKNavigationDelegateProtocol {
+) : NSObject(),
+    WKNavigationDelegateProtocol {
     @ObjCSignatureOverride
     override fun webView(webView: WKWebView, didStartProvisionalNavigation: WKNavigation?) {
         onPageStarted()

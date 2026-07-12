@@ -11,10 +11,7 @@ import androidx.compose.ui.Modifier
 import com.devindie.myday.feature.apppromotion.api.AppPromotionSettingsSection
 
 @Composable
-fun ProfileScreen(
-    onNavigateToSettings: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
+fun ProfileScreen(onNavigateToSettings: () -> Unit, modifier: Modifier = Modifier) {
     LazyColumn(modifier = modifier.fillMaxSize()) {
         item(key = "settings") {
             ListItem(

@@ -11,17 +11,16 @@ import platform.Foundation.NSURL
 import platform.Foundation.NSUserDomainMask
 
 @OptIn(ExperimentalForeignApi::class)
-fun createOnboardingDataStore(): DataStore<Preferences> =
-    PreferenceDataStoreFactory.createWithPath(
-        produceFile = {
-            val documentDirectory: NSURL? =
-                NSFileManager.defaultManager.URLForDirectory(
-                    directory = NSDocumentDirectory,
-                    inDomain = NSUserDomainMask,
-                    appropriateForURL = null,
-                    create = false,
-                    error = null,
-                )
-            (requireNotNull(documentDirectory).path + "/$ONBOARDING_DATASTORE_FILE").toPath()
-        },
-    )
+fun createOnboardingDataStore(): DataStore<Preferences> = PreferenceDataStoreFactory.createWithPath(
+    produceFile = {
+        val documentDirectory: NSURL? =
+            NSFileManager.defaultManager.URLForDirectory(
+                directory = NSDocumentDirectory,
+                inDomain = NSUserDomainMask,
+                appropriateForURL = null,
+                create = false,
+                error = null,
+            )
+        (requireNotNull(documentDirectory).path + "/$ONBOARDING_DATASTORE_FILE").toPath()
+    },
+)

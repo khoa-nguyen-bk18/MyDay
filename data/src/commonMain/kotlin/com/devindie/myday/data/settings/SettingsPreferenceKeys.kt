@@ -24,17 +24,12 @@ internal fun doubleKey(key: SettingKey) = doublePreferencesKey(prefName(key))
 
 private fun prefName(key: SettingKey): String = "setting_${key.value}"
 
-internal fun readValue(
-    preferences: Preferences,
-    key: SettingKey,
-    kind: SettingValue,
-): SettingValue? =
-    when (kind) {
-        is SettingValue.BooleanValue -> preferences[booleanKey(key)]?.let(SettingValue::BooleanValue)
-        is SettingValue.TextValue -> preferences[stringKey(key)]?.let(SettingValue::TextValue)
-        is SettingValue.SingleChoiceValue -> preferences[stringKey(key)]?.let(SettingValue::SingleChoiceValue)
-        is SettingValue.MultiChoiceValue -> preferences[stringSetKey(key)]?.let(SettingValue::MultiChoiceValue)
-        is SettingValue.IntValue -> preferences[intKey(key)]?.let(SettingValue::IntValue)
-        is SettingValue.LongValue -> preferences[longKey(key)]?.let(SettingValue::LongValue)
-        is SettingValue.DoubleValue -> preferences[doubleKey(key)]?.let(SettingValue::DoubleValue)
-    }
+internal fun readValue(preferences: Preferences, key: SettingKey, kind: SettingValue): SettingValue? = when (kind) {
+    is SettingValue.BooleanValue -> preferences[booleanKey(key)]?.let(SettingValue::BooleanValue)
+    is SettingValue.TextValue -> preferences[stringKey(key)]?.let(SettingValue::TextValue)
+    is SettingValue.SingleChoiceValue -> preferences[stringKey(key)]?.let(SettingValue::SingleChoiceValue)
+    is SettingValue.MultiChoiceValue -> preferences[stringSetKey(key)]?.let(SettingValue::MultiChoiceValue)
+    is SettingValue.IntValue -> preferences[intKey(key)]?.let(SettingValue::IntValue)
+    is SettingValue.LongValue -> preferences[longKey(key)]?.let(SettingValue::LongValue)
+    is SettingValue.DoubleValue -> preferences[doubleKey(key)]?.let(SettingValue::DoubleValue)
+}

@@ -16,125 +16,118 @@ import kotlin.test.assertTrue
 
 class StorageClientImplTest {
     @Test
-    fun pickFolder_delegatesToHost() =
-        runTest {
-            val host = FakeStoragePickerHost()
-            val client =
-                StorageClientImpl(
-                    provider = FakeStorageProvider(),
-                    pickerHost = host,
-                    enabled = true,
-                )
+    fun pickFolder_delegatesToHost() = runTest {
+        val host = FakeStoragePickerHost()
+        val client =
+            StorageClientImpl(
+                provider = FakeStorageProvider(),
+                pickerHost = host,
+                enabled = true,
+            )
 
-            val result = client.pickFolder(StoragePickRequest(StorageAccessMode.ReadWrite))
+        val result = client.pickFolder(StoragePickRequest(StorageAccessMode.ReadWrite))
 
-            assertEquals(StorageAccessMode.ReadWrite, host.lastRequest?.accessMode)
-            assertEquals(StorageLocationToken("fake-root"), (result as StorageResult.Success).value)
-        }
-
-    @Test
-    fun pickFolder_whenDisabled_returnsNotConfigured() =
-        runTest {
-            val client =
-                StorageClientImpl(
-                    provider = FakeStorageProvider(),
-                    pickerHost = FakeStoragePickerHost(),
-                    enabled = false,
-                )
-
-            val result = client.pickFolder(StoragePickRequest(StorageAccessMode.Read)) as StorageResult.Failure
-
-            assertEquals(StorageError.NotConfigured, result.error)
-        }
+        assertEquals(StorageAccessMode.ReadWrite, host.lastRequest?.accessMode)
+        assertEquals(StorageLocationToken("fake-root"), (result as StorageResult.Success).value)
+    }
 
     @Test
-    fun readText_roundTripsUtf8() =
-        runTest {
-            val provider = FakeStorageProvider()
-            val client =
-                StorageClientImpl(
-                    provider = provider,
-                    pickerHost = null,
-                    enabled = true,
-                )
-            val token = StorageLocationToken("root")
+    fun pickFolder_whenDisabled_returnsNotConfigured() = runTest {
+        val client =
+            StorageClientImpl(
+                provider = FakeStorageProvider(),
+                pickerHost = FakeStoragePickerHost(),
+                enabled = false,
+            )
 
-            client.writeText(token, "notes/hello.txt", "héllo")
-            val result = client.readText(token, "notes/hello.txt") as StorageResult.Success
+        val result = client.pickFolder(StoragePickRequest(StorageAccessMode.Read)) as StorageResult.Failure
 
-            assertEquals("héllo", result.value)
-        }
+        assertEquals(StorageError.NotConfigured, result.error)
+    }
 
     @Test
-    fun invalidPath_shortCircuitsWithoutCallingProvider() =
-        runTest {
-            val provider = FakeStorageProvider()
-            val client =
-                StorageClientImpl(
-                    provider = provider,
-                    pickerHost = null,
-                    enabled = true,
-                )
+    fun readText_roundTripsUtf8() = runTest {
+        val provider = FakeStorageProvider()
+        val client =
+            StorageClientImpl(
+                provider = provider,
+                pickerHost = null,
+                enabled = true,
+            )
+        val token = StorageLocationToken("root")
 
-            val result =
-                client.readBytes(
-                    StorageLocationToken("root"),
-                    "../secret",
-                ) as StorageResult.Failure
+        client.writeText(token, "notes/hello.txt", "héllo")
+        val result = client.readText(token, "notes/hello.txt") as StorageResult.Success
 
-            assertTrue(result.error is StorageError.InvalidPath)
-            assertEquals(0, provider.readBytesCallCount)
-        }
+        assertEquals("héllo", result.value)
+    }
 
     @Test
-    fun providerThrows_returnsIoFailure() =
-        runTest {
-            val provider =
-                object : StorageProvider by FakeStorageProvider() {
-                    override suspend fun readBytes(
-                        token: StorageLocationToken,
-                        relativePath: String,
-                    ): StorageResult<ByteArray> = error("disk failure")
-                }
-            val client =
-                StorageClientImpl(
-                    provider = provider,
-                    pickerHost = null,
-                    enabled = true,
-                )
+    fun invalidPath_shortCircuitsWithoutCallingProvider() = runTest {
+        val provider = FakeStorageProvider()
+        val client =
+            StorageClientImpl(
+                provider = provider,
+                pickerHost = null,
+                enabled = true,
+            )
 
-            val result =
-                client.readBytes(
-                    StorageLocationToken("root"),
-                    "file.txt",
-                ) as StorageResult.Failure
+        val result =
+            client.readBytes(
+                StorageLocationToken("root"),
+                "../secret",
+            ) as StorageResult.Failure
 
-            assertTrue(result.error is StorageError.Io)
-            assertEquals("disk failure", (result.error as StorageError.Io).message)
-        }
+        assertTrue(result.error is StorageError.InvalidPath)
+        assertEquals(0, provider.readBytesCallCount)
+    }
 
     @Test
-    fun disabledProvider_usesNoOp() =
-        runTest {
-            val client =
-                StorageClientImpl(
-                    provider = NoOpStorageProvider(),
-                    pickerHost = null,
-                    enabled = false,
-                )
+    fun providerThrows_returnsIoFailure() = runTest {
+        val provider =
+            object : StorageProvider by FakeStorageProvider() {
+                override suspend fun readBytes(
+                    token: StorageLocationToken,
+                    relativePath: String,
+                ): StorageResult<ByteArray> = error("disk failure")
+            }
+        val client =
+            StorageClientImpl(
+                provider = provider,
+                pickerHost = null,
+                enabled = true,
+            )
 
-            val result =
-                client.list(
-                    StorageLocationToken("root"),
-                ) as StorageResult.Failure
+        val result =
+            client.readBytes(
+                StorageLocationToken("root"),
+                "file.txt",
+            ) as StorageResult.Failure
 
-            assertEquals(StorageError.NotConfigured, result.error)
-        }
+        assertTrue(result.error is StorageError.Io)
+        assertEquals("disk failure", (result.error as StorageError.Io).message)
+    }
+
+    @Test
+    fun disabledProvider_usesNoOp() = runTest {
+        val client =
+            StorageClientImpl(
+                provider = NoOpStorageProvider(),
+                pickerHost = null,
+                enabled = false,
+            )
+
+        val result =
+            client.list(
+                StorageLocationToken("root"),
+            ) as StorageResult.Failure
+
+        assertEquals(StorageError.NotConfigured, result.error)
+    }
 }
 
-private class FakeStoragePickerHost(
-    private val token: StorageLocationToken = StorageLocationToken("fake-root"),
-) : StoragePickerHost {
+private class FakeStoragePickerHost(private val token: StorageLocationToken = StorageLocationToken("fake-root")) :
+    StoragePickerHost {
     var lastRequest: StoragePickRequest? = null
 
     override suspend fun pickFolder(request: StoragePickRequest): StorageResult<StorageLocationToken> {
@@ -143,15 +136,11 @@ private class FakeStoragePickerHost(
     }
 }
 
-private class FakeStorageProvider(
-    private val files: MutableMap<String, ByteArray> = mutableMapOf(),
-) : StorageProvider {
+private class FakeStorageProvider(private val files: MutableMap<String, ByteArray> = mutableMapOf()) :
+    StorageProvider {
     var readBytesCallCount: Int = 0
 
-    override suspend fun list(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<List<StorageEntry>> {
+    override suspend fun list(token: StorageLocationToken, relativePath: String): StorageResult<List<StorageEntry>> {
         val prefix = pathPrefix(relativePath)
         val entries =
             files.keys
@@ -173,15 +162,10 @@ private class FakeStorageProvider(
         return StorageResult.Success(entries)
     }
 
-    override suspend fun exists(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<Boolean> = StorageResult.Success(relativePath in files)
+    override suspend fun exists(token: StorageLocationToken, relativePath: String): StorageResult<Boolean> =
+        StorageResult.Success(relativePath in files)
 
-    override suspend fun readBytes(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<ByteArray> {
+    override suspend fun readBytes(token: StorageLocationToken, relativePath: String): StorageResult<ByteArray> {
         readBytesCallCount++
         val bytes = files[relativePath] ?: return StorageResult.Failure(StorageError.NotFound)
         return StorageResult.Success(bytes)
@@ -196,18 +180,14 @@ private class FakeStorageProvider(
         return StorageResult.Success(Unit)
     }
 
-    override suspend fun delete(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<Unit> {
+    override suspend fun delete(token: StorageLocationToken, relativePath: String): StorageResult<Unit> {
         files.remove(relativePath)
         return StorageResult.Success(Unit)
     }
 
-    private fun pathPrefix(relativePath: String): String =
-        if (relativePath.isEmpty()) {
-            ""
-        } else {
-            "$relativePath/"
-        }
+    private fun pathPrefix(relativePath: String): String = if (relativePath.isEmpty()) {
+        ""
+    } else {
+        "$relativePath/"
+    }
 }

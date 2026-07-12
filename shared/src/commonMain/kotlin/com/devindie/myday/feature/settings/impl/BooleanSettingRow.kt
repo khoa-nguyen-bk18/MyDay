@@ -18,9 +18,9 @@ internal fun BooleanSettingRow(
         modifier = modifier.fillMaxWidth(),
         headlineContent = { Text(item.title) },
         supportingContent =
-            item.description?.let { description ->
-                { Text(description) }
-            },
+        item.description?.let { description ->
+            { Text(description) }
+        },
         trailingContent = {
             Switch(
                 checked = item.value,

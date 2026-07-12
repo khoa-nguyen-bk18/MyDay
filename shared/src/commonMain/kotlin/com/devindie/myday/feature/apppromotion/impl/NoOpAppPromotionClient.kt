@@ -8,6 +8,5 @@ internal class NoOpAppPromotionClient : AppPromotionClient {
     override suspend fun requestInAppReview(): AppPromotionResult =
         AppPromotionResult.Failure(AppPromotionError.NotConfigured)
 
-    override suspend fun shareApp(): AppPromotionResult =
-        AppPromotionResult.Failure(AppPromotionError.NotConfigured)
+    override suspend fun shareApp(): AppPromotionResult = AppPromotionResult.Failure(AppPromotionError.NotConfigured)
 }

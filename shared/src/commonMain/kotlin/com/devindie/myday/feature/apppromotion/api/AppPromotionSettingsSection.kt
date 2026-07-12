@@ -16,10 +16,7 @@ import androidx.compose.ui.unit.dp
 import org.koin.compose.koinInject
 
 @Composable
-fun AppPromotionSettingsSection(
-    modifier: Modifier = Modifier,
-    client: AppPromotionClient = koinInject(),
-) {
+fun AppPromotionSettingsSection(modifier: Modifier = Modifier, client: AppPromotionClient = koinInject()) {
     val actions = rememberAppPromotionActions(client)
     Text(
         text = "Support",

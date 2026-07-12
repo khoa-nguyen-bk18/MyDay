@@ -42,13 +42,13 @@ internal fun TextSettingRow(
             singleLine = true,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions =
-                KeyboardActions(
-                    onDone = {
-                        if (text != item.value) {
-                            onValueCommit(text)
-                        }
-                    },
-                ),
+            KeyboardActions(
+                onDone = {
+                    if (text != item.value) {
+                        onValueCommit(text)
+                    }
+                },
+            ),
         )
     }
 }

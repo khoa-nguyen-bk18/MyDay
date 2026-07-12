@@ -13,7 +13,7 @@ class MainRouteTest {
     }
 
     @Test
-    fun startDestination_isBrowse() {
-        assertEquals(MainRoute.Browse, MainDestination.Start.route)
+    fun startDestination_isReflect() {
+        assertEquals(MainRoute.Reflect, MainDestination.Start.route)
     }
 }

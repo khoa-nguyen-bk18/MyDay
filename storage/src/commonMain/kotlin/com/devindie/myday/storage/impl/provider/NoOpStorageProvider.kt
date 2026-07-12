@@ -7,20 +7,14 @@ import com.devindie.myday.storage.api.StorageResult
 import com.devindie.myday.storage.api.provider.StorageProvider
 
 internal class NoOpStorageProvider : StorageProvider {
-    override suspend fun list(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<List<StorageEntry>> = notConfigured()
+    override suspend fun list(token: StorageLocationToken, relativePath: String): StorageResult<List<StorageEntry>> =
+        notConfigured()
 
-    override suspend fun exists(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<Boolean> = notConfigured()
+    override suspend fun exists(token: StorageLocationToken, relativePath: String): StorageResult<Boolean> =
+        notConfigured()
 
-    override suspend fun readBytes(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<ByteArray> = notConfigured()
+    override suspend fun readBytes(token: StorageLocationToken, relativePath: String): StorageResult<ByteArray> =
+        notConfigured()
 
     override suspend fun writeBytes(
         token: StorageLocationToken,
@@ -28,11 +22,8 @@ internal class NoOpStorageProvider : StorageProvider {
         bytes: ByteArray,
     ): StorageResult<Unit> = notConfigured()
 
-    override suspend fun delete(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<Unit> = notConfigured()
+    override suspend fun delete(token: StorageLocationToken, relativePath: String): StorageResult<Unit> =
+        notConfigured()
 
-    private fun <T> notConfigured(): StorageResult<T> =
-        StorageResult.Failure(StorageError.NotConfigured)
+    private fun <T> notConfigured(): StorageResult<T> = StorageResult.Failure(StorageError.NotConfigured)
 }

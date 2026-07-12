@@ -9,40 +9,36 @@ import kotlin.test.assertTrue
 
 class AppPromotionClientImplTest {
     @Test
-    fun requestInAppReview_delegatesToPlatform() =
-        runTest {
-            var called = false
-            val platform =
-                object : AppPromotionPlatform {
-                    override suspend fun requestInAppReview() =
-                        AppPromotionResult.Success.also { called = true }
+    fun requestInAppReview_delegatesToPlatform() = runTest {
+        var called = false
+        val platform =
+            object : AppPromotionPlatform {
+                override suspend fun requestInAppReview() = AppPromotionResult.Success.also { called = true }
 
-                    override suspend fun shareApp() = AppPromotionResult.Success
-                }
-            val client = AppPromotionClientImpl(platform)
+                override suspend fun shareApp() = AppPromotionResult.Success
+            }
+        val client = AppPromotionClientImpl(platform)
 
-            val result = client.requestInAppReview()
+        val result = client.requestInAppReview()
 
-            assertEquals(AppPromotionResult.Success, result)
-            assertTrue(called)
-        }
+        assertEquals(AppPromotionResult.Success, result)
+        assertTrue(called)
+    }
 
     @Test
-    fun shareApp_delegatesToPlatform() =
-        runTest {
-            var called = false
-            val platform =
-                object : AppPromotionPlatform {
-                    override suspend fun requestInAppReview() = AppPromotionResult.Success
+    fun shareApp_delegatesToPlatform() = runTest {
+        var called = false
+        val platform =
+            object : AppPromotionPlatform {
+                override suspend fun requestInAppReview() = AppPromotionResult.Success
 
-                    override suspend fun shareApp() =
-                        AppPromotionResult.Success.also { called = true }
-                }
-            val client = AppPromotionClientImpl(platform)
+                override suspend fun shareApp() = AppPromotionResult.Success.also { called = true }
+            }
+        val client = AppPromotionClientImpl(platform)
 
-            val result = client.shareApp()
+        val result = client.shareApp()
 
-            assertEquals(AppPromotionResult.Success, result)
-            assertTrue(called)
-        }
+        assertEquals(AppPromotionResult.Success, result)
+        assertTrue(called)
+    }
 }

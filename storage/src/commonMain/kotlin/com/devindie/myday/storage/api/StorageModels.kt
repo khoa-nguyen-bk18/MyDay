@@ -6,9 +6,7 @@ enum class StorageAccessMode {
     ReadWrite,
 }
 
-data class StoragePickRequest(
-    val accessMode: StorageAccessMode,
-)
+data class StoragePickRequest(val accessMode: StorageAccessMode)
 
 data class StorageLocationToken(val value: String)
 

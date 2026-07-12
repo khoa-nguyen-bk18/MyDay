@@ -204,6 +204,7 @@ class DailyReflectionViewModel(
                         )
                     }
                 }.onFailure { error ->
+                    print(error)
                     when (error) {
                         is ReflectionError.AlreadyExists ->
                             _uiState.update { it.copy(saveConfirmRequired = true) }

@@ -6,11 +6,10 @@ import platform.Foundation.NSURL
 import platform.UIKit.UIApplication
 
 @Composable
-internal actual fun rememberOpenUrlExternally(): (String) -> Unit =
-    remember {
-        { url ->
-            NSURL.URLWithString(url)?.let { nsUrl ->
-                UIApplication.sharedApplication.openURL(nsUrl)
-            }
+internal actual fun rememberOpenUrlExternally(): (String) -> Unit = remember {
+    { url ->
+        NSURL.URLWithString(url)?.let { nsUrl ->
+            UIApplication.sharedApplication.openURL(nsUrl)
         }
     }
+}

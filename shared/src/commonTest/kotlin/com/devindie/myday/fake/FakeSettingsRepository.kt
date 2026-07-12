@@ -11,8 +11,7 @@ import kotlinx.coroutines.flow.update
 class FakeSettingsRepository : SettingsRepository {
     private val values = MutableStateFlow<Map<SettingKey, SettingValue>>(emptyMap())
 
-    override fun observeValue(key: SettingKey, kind: SettingValue): Flow<SettingValue?> =
-        values.map { it[key] }
+    override fun observeValue(key: SettingKey, kind: SettingValue): Flow<SettingValue?> = values.map { it[key] }
 
     override suspend fun getValue(key: SettingKey, kind: SettingValue): SettingValue? = values.value[key]
 
