@@ -84,7 +84,11 @@ fun parseComposableBlocks(content: String): List<ComposableBlock> {
 
 fun extractFunctionSignature(header: String): String = header.substringAfter(" fun ").substringBefore("(").trim()
 
-fun writeStabilitySummary(blocks: List<ComposableBlock>, sourceFile: java.io.File, outputFile: java.io.File) {
+fun writeStabilitySummary(
+    blocks: List<ComposableBlock>,
+    sourceFile: java.io.File,
+    outputFile: java.io.File,
+) {
     val nonSkippable = blocks.filter { it.isNonSkippable }.sortedBy { it.header }
     val unstableParamsOnly =
         blocks
@@ -149,7 +153,10 @@ fun writeStabilitySummary(blocks: List<ComposableBlock>, sourceFile: java.io.Fil
     }
 }
 
-fun writeSortedComposableReport(blocks: List<ComposableBlock>, outputFile: java.io.File) {
+fun writeSortedComposableReport(
+    blocks: List<ComposableBlock>,
+    outputFile: java.io.File,
+) {
     val sorted = blocks.sortedBy { it.sortKey }
     outputFile.parentFile.mkdirs()
     outputFile.bufferedWriter().use { writer ->

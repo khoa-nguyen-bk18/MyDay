@@ -10,25 +10,24 @@ object AppSettings {
     val ShowCardImages = SettingKey("appearance.show_card_images")
     val Theme = SettingKey("appearance.theme")
 
-    fun appearanceDefinitions(): List<SettingDefinition> =
-        listOf(
-            BooleanSettingDefinition(
-                key = ShowCardImages,
-                title = "Show card images",
-                description = "Display images on card rows",
-                default = true,
+    fun appearanceDefinitions(): List<SettingDefinition> = listOf(
+        BooleanSettingDefinition(
+            key = ShowCardImages,
+            title = "Show card images",
+            description = "Display images on card rows",
+            default = true,
+        ),
+        SingleChoiceSettingDefinition(
+            key = Theme,
+            title = "Theme",
+            description = "App color theme",
+            options =
+            listOf(
+                SettingOption("system", "System"),
+                SettingOption("light", "Light"),
+                SettingOption("dark", "Dark"),
             ),
-            SingleChoiceSettingDefinition(
-                key = Theme,
-                title = "Theme",
-                description = "App color theme",
-                options =
-                    listOf(
-                        SettingOption("system", "System"),
-                        SettingOption("light", "Light"),
-                        SettingOption("dark", "Dark"),
-                    ),
-                defaultOptionId = "system",
-            ),
-        )
+            defaultOptionId = "system",
+        ),
+    )
 }

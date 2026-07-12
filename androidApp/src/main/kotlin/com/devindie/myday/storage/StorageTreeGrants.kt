@@ -4,11 +4,7 @@ import android.content.ContentResolver
 import android.net.Uri
 import com.devindie.myday.storage.api.StorageAccessMode
 
-internal fun persistTreeGrant(
-    contentResolver: ContentResolver,
-    uri: Uri,
-    mode: StorageAccessMode,
-) {
+internal fun persistTreeGrant(contentResolver: ContentResolver, uri: Uri, mode: StorageAccessMode) {
     contentResolver.takePersistableUriPermission(
         uri,
         persistableUriFlags(mode),

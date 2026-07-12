@@ -5,11 +5,20 @@ plugins {
 
 android {
     namespace = "com.devindie.myday.benchmark"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.compileSdk
+            .get()
+            .toInt()
 
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
+        targetSdk =
+            libs.versions.android.targetSdk
+                .get()
+                .toInt()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Allow local runs while Android Studio "Running Devices" mirroring is active.
         // Remove for CI/release perf gates where mirrored frames skew FrameTimingMetric.

@@ -105,14 +105,14 @@ private fun NumberSettingRowContent(
             modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
             singleLine = true,
             keyboardOptions =
-                KeyboardOptions(
-                    keyboardType = keyboardType,
-                    imeAction = ImeAction.Done,
-                ),
+            KeyboardOptions(
+                keyboardType = keyboardType,
+                imeAction = ImeAction.Done,
+            ),
             keyboardActions =
-                KeyboardActions(
-                    onDone = { onValueCommit(text) },
-                ),
+            KeyboardActions(
+                onDone = { onValueCommit(text) },
+            ),
         )
     }
 }

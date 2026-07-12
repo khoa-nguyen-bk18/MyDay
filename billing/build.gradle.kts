@@ -63,8 +63,9 @@ kotlin {
     }
 }
 
-tasks.matching { task ->
-    task.name.contains("ios", ignoreCase = true) && task.name.contains("Test", ignoreCase = true)
-}.configureEach {
-    enabled = false
-}
+tasks
+    .matching { task ->
+        task.name.contains("ios", ignoreCase = true) && task.name.contains("Test", ignoreCase = true)
+    }.configureEach {
+        enabled = false
+    }

@@ -28,10 +28,7 @@ private const val SMOKE_FILE = "myday-storage-smoke.txt"
 private const val SMOKE_TEXT = "myday storage smoke test"
 
 @Composable
-fun StorageSmokePanel(
-    modifier: Modifier = Modifier,
-    storage: StorageClient = koinInject(),
-) {
+fun StorageSmokePanel(modifier: Modifier = Modifier, storage: StorageClient = koinInject()) {
     var status by remember { mutableStateOf("Pick a folder, then run the write/read smoke check.") }
     var token by remember { mutableStateOf<StorageLocationToken?>(null) }
     val scope = rememberCoroutineScope()
@@ -120,11 +117,10 @@ fun StorageSmokePanel(
     }
 }
 
-private fun StorageError.format(): String =
-    when (this) {
-        StorageError.NotConfigured -> "not configured (storage disabled or picker host missing)"
-        StorageError.PermissionDenied -> "permission denied"
-        StorageError.NotFound -> "not found"
-        is StorageError.InvalidPath -> "invalid path: $relativePath"
-        is StorageError.Io -> "io: $message"
-    }
+private fun StorageError.format(): String = when (this) {
+    StorageError.NotConfigured -> "not configured (storage disabled or picker host missing)"
+    StorageError.PermissionDenied -> "permission denied"
+    StorageError.NotFound -> "not found"
+    is StorageError.InvalidPath -> "invalid path: $relativePath"
+    is StorageError.Io -> "io: $message"
+}

@@ -9,15 +9,14 @@ import platform.Foundation.create
 
 @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
 internal object IosNSDataFactory {
-    fun fromByteArray(bytes: ByteArray): NSData =
-        if (bytes.isEmpty()) {
-            NSData()
-        } else {
-            bytes.usePinned { pinned ->
-                NSData.create(
-                    bytes = pinned.addressOf(0),
-                    length = bytes.size.toULong(),
-                )
-            }
+    fun fromByteArray(bytes: ByteArray): NSData = if (bytes.isEmpty()) {
+        NSData()
+    } else {
+        bytes.usePinned { pinned ->
+            NSData.create(
+                bytes = pinned.addressOf(0),
+                length = bytes.size.toULong(),
+            )
         }
+    }
 }

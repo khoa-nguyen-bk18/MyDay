@@ -34,20 +34,20 @@ internal fun MultiChoiceSettingRow(
 
     ListItem(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .clickable {
-                    draftSelection = item.selectedOptionIds
-                    showDialog = true
-                },
+        modifier
+            .fillMaxWidth()
+            .clickable {
+                draftSelection = item.selectedOptionIds
+                showDialog = true
+            },
         headlineContent = { Text(item.title) },
         supportingContent = {
             Text(
                 text =
-                    buildString {
-                        item.description?.let { append("$it\n") }
-                        append(summary)
-                    },
+                buildString {
+                    item.description?.let { append("$it\n") }
+                    append(summary)
+                },
             )
         },
     )
@@ -62,16 +62,16 @@ internal fun MultiChoiceSettingRow(
                         val checked = option.id in draftSelection
                         ListItem(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        draftSelection =
-                                            if (checked) {
-                                                draftSelection - option.id
-                                            } else {
-                                                draftSelection + option.id
-                                            }
-                                    },
+                            Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    draftSelection =
+                                        if (checked) {
+                                            draftSelection - option.id
+                                        } else {
+                                            draftSelection + option.id
+                                        }
+                                },
                             headlineContent = { Text(option.label) },
                             leadingContent = {
                                 Checkbox(

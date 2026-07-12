@@ -5,9 +5,6 @@ import com.devindie.myday.storage.api.StorageLocationToken
 import com.devindie.myday.storage.api.StoragePickRequest
 import com.devindie.myday.storage.api.StorageResult
 import com.devindie.myday.storage.api.provider.StoragePickerHost
-import kotlin.coroutines.resume
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.ObjCSignatureOverride
@@ -17,7 +14,6 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.Foundation.NSData
 import platform.Foundation.NSURL
 import platform.Foundation.NSURLBookmarkCreationWithSecurityScope
-import platform.Foundation.create
 import platform.UIKit.UIApplication
 import platform.UIKit.UIDocumentPickerDelegateProtocol
 import platform.UIKit.UIDocumentPickerMode
@@ -26,6 +22,9 @@ import platform.UIKit.UIViewController
 import platform.UIKit.UIWindow
 import platform.darwin.NSObject
 import platform.posix.memcpy
+import kotlin.coroutines.resume
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class, ExperimentalEncodingApi::class)
 class IosStoragePickerHost : StoragePickerHost {
@@ -66,6 +65,7 @@ class IosStoragePickerHost : StoragePickerHost {
 
     private fun topViewController(): UIViewController? {
         val application = UIApplication.sharedApplication
+
         @Suppress("UNCHECKED_CAST")
         val windows = application.windows as? List<UIWindow>
         val window = windows?.firstOrNull() ?: application.keyWindow
@@ -78,15 +78,11 @@ class IosStoragePickerHost : StoragePickerHost {
 }
 
 @OptIn(ExperimentalForeignApi::class, BetaInteropApi::class, ExperimentalEncodingApi::class)
-private class FolderPickerDelegate(
-    private val onComplete: (StorageResult<StorageLocationToken>) -> Unit,
-) : NSObject(),
+private class FolderPickerDelegate(private val onComplete: (StorageResult<StorageLocationToken>) -> Unit) :
+    NSObject(),
     UIDocumentPickerDelegateProtocol {
     @ObjCSignatureOverride
-    override fun documentPicker(
-        controller: UIDocumentPickerViewController,
-        didPickDocumentsAtURLs: List<*>,
-    ) {
+    override fun documentPicker(controller: UIDocumentPickerViewController, didPickDocumentsAtURLs: List<*>) {
         val url = didPickDocumentsAtURLs.firstOrNull() as? NSURL
         if (url == null) {
             onComplete(StorageResult.Cancelled)

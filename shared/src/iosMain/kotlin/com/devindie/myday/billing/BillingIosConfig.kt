@@ -10,11 +10,10 @@ internal object BillingIosConfig {
     const val API_KEY: String = ""
 }
 
-fun billingConfigForIos(): BillingConfig =
-    BillingConfig(
-        enabled = BillingIosConfig.ENABLED && BillingIosConfig.API_KEY.isNotBlank(),
-        revenueCatApiKeyIos = BillingIosConfig.API_KEY,
-    )
+fun billingConfigForIos(): BillingConfig = BillingConfig(
+    enabled = BillingIosConfig.ENABLED && BillingIosConfig.API_KEY.isNotBlank(),
+    revenueCatApiKeyIos = BillingIosConfig.API_KEY,
+)
 
 fun configureBillingPlatform() {
     if (BillingIosConfig.ENABLED && BillingIosConfig.API_KEY.isNotBlank()) {

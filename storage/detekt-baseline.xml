@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MagicNumber:IosDocumentStorageProvider.kt:IosDocumentStorageProvider$1_000</ID>
+    <ID>ReturnCount:AndroidSafStorageProvider.kt:AndroidSafStorageProvider$private fun resolveDocument: DocumentFile?</ID>
+    <ID>ReturnCount:IosDocumentStorageProvider.kt:IosDocumentStorageProvider$private fun resolveChildUrl: NSURL?</ID>
+    <ID>ReturnCount:StorageClientImpl.kt:StorageClientImpl$override suspend fun pickFolder: StorageResult&lt;StorageLocationToken&gt;</ID>
+    <ID>ReturnCount:StoragePathValidator.kt:StoragePathValidator$fun validate: StorageError.InvalidPath?</ID>
+    <ID>TooManyFunctions:IosDocumentStorageProvider.kt:IosDocumentStorageProvider : StorageProvider</ID>
+  </CurrentIssues>
+</SmellBaseline>

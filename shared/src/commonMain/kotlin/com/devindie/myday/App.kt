@@ -6,8 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.devindie.myday.core.navigation.MainShellRoute
-import com.devindie.myday.feature.apppromotion.api.AppPromotionPlatformBinding
 import com.devindie.myday.core.ui.theme.AppTheme
+import com.devindie.myday.feature.apppromotion.api.AppPromotionPlatformBinding
 import com.devindie.myday.feature.main.api.MainScreen
 import com.devindie.myday.feature.onboarding.api.OnboardingRoute
 import com.devindie.myday.feature.onboarding.api.OnboardingScreen

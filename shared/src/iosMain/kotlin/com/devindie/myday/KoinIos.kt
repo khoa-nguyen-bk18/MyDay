@@ -13,13 +13,13 @@ import com.devindie.myday.storage.storageKoinModuleForIos
 fun doInitKoin() {
     startKoinApp(
         appModules =
-            listOf(
-                platformDataModule(),
-                settingsCatalogModule(),
-                browsePagingModule,
-                analyticsFeatureModule(AnalyticsConfig(enabled = true)),
-                billingFeatureModule(billingConfigForIos()),
-                storageKoinModuleForIos(),
-            ),
+        listOf(
+            platformDataModule(),
+            settingsCatalogModule(),
+            browsePagingModule,
+            analyticsFeatureModule(AnalyticsConfig(enabled = true)),
+            billingFeatureModule(billingConfigForIos()),
+            storageKoinModuleForIos(),
+        ),
     )
 }

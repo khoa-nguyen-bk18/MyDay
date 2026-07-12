@@ -26,26 +26,26 @@ class MyDayApplication : Application() {
 
         startKoinApp(
             appModules =
-                listOf(
-                    platformDataModule(),
-                    settingsCatalogModule(),
-                    browsePagingModule,
-                    analyticsFeatureModule(
-                        AnalyticsConfig(
-                            enabled = !BuildConfig.DEBUG,
-                        ),
-                    ),
-                    billingKoinModuleForAndroid(
-                        enabled = BuildConfig.BILLING_ENABLED,
-                        apiKey = BuildConfig.REVENUECAT_API_KEY_ANDROID,
-                    ),
-                    storageFeatureModule(
-                        StorageConfig(
-                            enabled = true,
-                            pickerHost = AndroidStoragePickerHost(contentResolver),
-                        ),
+            listOf(
+                platformDataModule(),
+                settingsCatalogModule(),
+                browsePagingModule,
+                analyticsFeatureModule(
+                    AnalyticsConfig(
+                        enabled = !BuildConfig.DEBUG,
                     ),
                 ),
+                billingKoinModuleForAndroid(
+                    enabled = BuildConfig.BILLING_ENABLED,
+                    apiKey = BuildConfig.REVENUECAT_API_KEY_ANDROID,
+                ),
+                storageFeatureModule(
+                    StorageConfig(
+                        enabled = true,
+                        pickerHost = AndroidStoragePickerHost(contentResolver),
+                    ),
+                ),
+            ),
         ) {
             androidContext(this@MyDayApplication)
         }

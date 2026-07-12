@@ -22,36 +22,24 @@ internal class StorageClientImpl(
         return runSafely { host.pickFolder(request) }
     }
 
-    override suspend fun list(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<List<StorageEntry>> =
+    override suspend fun list(token: StorageLocationToken, relativePath: String): StorageResult<List<StorageEntry>> =
         runForPath(relativePath) {
             provider.list(token, relativePath)
         }
 
-    override suspend fun exists(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<Boolean> =
+    override suspend fun exists(token: StorageLocationToken, relativePath: String): StorageResult<Boolean> =
         runForPath(relativePath) {
             provider.exists(token, relativePath)
         }
 
-    override suspend fun readText(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<String> =
+    override suspend fun readText(token: StorageLocationToken, relativePath: String): StorageResult<String> =
         when (val result = readBytes(token, relativePath)) {
             is StorageResult.Success -> StorageResult.Success(result.value.decodeToString())
             is StorageResult.Failure -> result
             is StorageResult.Cancelled -> StorageResult.Cancelled
         }
 
-    override suspend fun readBytes(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<ByteArray> =
+    override suspend fun readBytes(token: StorageLocationToken, relativePath: String): StorageResult<ByteArray> =
         runForPath(relativePath) {
             provider.readBytes(token, relativePath)
         }
@@ -66,15 +54,11 @@ internal class StorageClientImpl(
         token: StorageLocationToken,
         relativePath: String,
         bytes: ByteArray,
-    ): StorageResult<Unit> =
-        runForPath(relativePath) {
-            provider.writeBytes(token, relativePath, bytes)
-        }
+    ): StorageResult<Unit> = runForPath(relativePath) {
+        provider.writeBytes(token, relativePath, bytes)
+    }
 
-    override suspend fun delete(
-        token: StorageLocationToken,
-        relativePath: String,
-    ): StorageResult<Unit> =
+    override suspend fun delete(token: StorageLocationToken, relativePath: String): StorageResult<Unit> =
         runForPath(relativePath) {
             provider.delete(token, relativePath)
         }
@@ -89,9 +73,7 @@ internal class StorageClientImpl(
         return runSafely(block)
     }
 
-    private suspend inline fun <T> runSafely(
-        crossinline block: suspend () -> StorageResult<T>,
-    ): StorageResult<T> =
+    private suspend inline fun <T> runSafely(crossinline block: suspend () -> StorageResult<T>): StorageResult<T> =
         try {
             block()
         } catch (@Suppress("TooGenericExceptionCaught") error: Exception) {
